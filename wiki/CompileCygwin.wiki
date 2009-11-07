@@ -1,4 +1,5 @@
 #summary HOW-TO compile sylverant project in a Cygwin enviroment
+#labels Phase-Deploy
 
 = Introduction =
 
@@ -111,23 +112,7 @@ make install
 
 11. After XML files, now we have to create the PSO Database and Tables in *MySQL*.
 
-*Note:* You can enter using cygwin as a client:
-
-{{{
-mysql -h 127.0.0.1 -u root -p
-
-create database pso;
-use pso;
-
-create table online_ships (ship_id int not null primary key, name varchar(20) not null, players long not null, ip long not null, port long not null, int_ip long not null);
-create table account_data (username varchar(20) not null primary key, password varchar(20) not null, email varchar(20), regtime long, isgm int, isactive int);
-create table guildcards (account_id int not null primary key);
-create table character_data (guildcard int not null primary key, slot long not null, data long, header varchar(20));
-create table dreamcast_clients (guildcard int not null primary key, serial_number varchar(20) not null, access_key varchar(20) not null, dc_id varchar(20) not null);
-
-show tables;
-exit;
-}}}
+See [DatabaseLayout] for information about the layout of the tables in Sylverant.
 
 12. *FINALLY!* Time to start our server!
 
