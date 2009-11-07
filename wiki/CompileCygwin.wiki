@@ -18,11 +18,11 @@ You will need *Cygwin 1.7* (beta!) or a newer version. (Note: You can install 1.
 
 2.1. MYSQL Server side:
 
-You can install MySQL in your normal environment (Windows I suppose...) and on the same machine or on a remote one. Using cygwin as server doesn't work.
+You can install a MySQL Server in your normal environment (Windows I suppose...) and on the same machine or on a remote one. Using cygwin as server doesn't work.
 
-2.2. MySQL Server side:
+2.2. MySQL Client side:
 
-Get MySQL sources (tested 5.1.40).
+Get MySQL sources (tested with version 5.1.40).
 
 Extract sources to: /usr/local/
 
@@ -35,7 +35,7 @@ make install
 3. Create sylverant folder in */usr/local* and get a copy from *SVN*: [http://sylverant.googlecode.com/svn]
 
 
-4. Compile libsylverant (needed for the rest of packages)
+4. Compile libsylverant (needed for the rest of packages).
 {{{
 cd sylverant/trunk/libsylverant
 autoreconf --install
@@ -44,7 +44,7 @@ make all
 make install
 }}}
 
-5. Compile login_server
+5. Compile login_server.
 {{{
 cd sylverant/trunk/login_server
 autoreconf --install
@@ -53,7 +53,7 @@ make all
 make install
 }}}
 
-6. Compile patch_server
+6. Compile patch_server.
 {{{
 cd sylverant/trunk/patch_server (Needed for PSO PC Players).
 autoreconf --install
@@ -62,7 +62,7 @@ make all
 make install
 }}}
 
-7. Compile ship_server
+7. Compile ship_server.
 {{{
 cd sylverant/trunk/ship_server
 touch config.rpath (seems automake 1.10 bug)
@@ -72,7 +72,7 @@ make all
 make install
 }}}
 
-8. Compile shipgate
+8. Compile shipgate.
 {{{
 cd sylverant/trunk/shipgate
 autoreconf --install
@@ -81,37 +81,35 @@ make all
 make install
 }}}
 
-9. Now, first thing is to put XML configuration files
+9. Now, first thing is to put XML configuration files:
   * Create *"sylverant"* folder inside /usr/local/share/
   * Create *"config"* folder inside /usr/local/share/sylverant
-  * Put the 4 xml files inside config folder (ship_config.xml, iselia_quests.xml, iselia_gms.xml, sylverant_config.xml).
-
-  * Create *"keys"* folder and put the Key file: iselia_key.bin
+  * Put the 4 XML files inside config folder (ship_config.xml, quests.xml, gms.xml, sylverant_config.xml).
+  * Create *"keys"* folder and put the Key file: key.bin
   * Create *"info"* folder and put: about.txt, bugs.txt and bugreport.txt
 
 10. Next step is to edit XML data:
 
 *sylverant_config.xml*
 
-Database:
+  * Change database tag:
+    * host = 127.0.0.1 (or the remote address)
+    * user = root (or any other with privilegies)
+    * pass = the password...
+    * db = pso (default database)
+    * port = 3306 (default MySQL port)
 
-host= 127.0.0.1 (or the remote address)
-user= root (or any other with privilegies)
-pass= the password
-db= pso (default database)
-port= 3306 (default MySQL one)
-
-Server:
-
-addr=Your external IP.
-port=12000 (Open the port!)
+  * Change server tag:
+    * addr = Your external IP.
+    * port = 12000 (Open the port in your router!)
 
 *ship_config.xml*
 
-<shipgate ip="IP of shipgate" port="12000"/>
-<net port="12001" ip="IP of shipgate"/>
+  * Change the IP and port of the shipgate entry with the shipgate ones.
+  * Change the IP and port of net port.
+  * Modify your ship: Name, Quests filename, GMs filename, Key filename...
 
-11. After XML files, now we have to create the database and the tables in *MySQL*.
+11. After XML files, now we have to create the PSO Database and Tables in *MySQL*.
 
 *Note:* You can enter using cygwin as a client:
 
