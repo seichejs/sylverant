@@ -1,0 +1,152 @@
+#summary HOW-TO compile sylverant project in a Cygwin enviroment
+
+= Introduction =
+
+The objective of this guide is to help any user to get a full running Sylverant PSO server running in a Windows enviroment using Cygwin.
+
+To have success on it, you need a minimum Unix level.
+I.e: know how to get a SVN copy, and how to use make tools and a little about MySQL.
+
+
+= Steps =
+
+You will need *Cygwin 1.7* (beta!) or a newer version. (Note: You can install 1.7 and 1.5 versions in the same computer).
+
+1. Install Cygwin and add the following packages (with their dependences):
+
+*autotools automake libtool openssl openssl-devel readline gettext-devel gcc-core gcc-g++ make libiconv*
+
+2.1. MYSQL Server side:
+
+You can install MySQL in your normal environment (Windows I suppose...) and on the same machine or on a remote one. Using cygwin as server doesn't work.
+
+2.2. MySQL Server side:
+
+Get MySQL sources (tested 5.1.40).
+
+Extract sources to: /usr/local/
+
+{{{
+./configure --without-server --without-readline --without-libedit CFLAGS=-O2
+make
+make install
+}}}
+
+3. Create sylverant folder in */usr/local* and get a copy from *SVN*: [http://sylverant.googlecode.com/svn]
+
+
+4. Compile libsylverant (needed for the rest of packages)
+{{{
+cd sylverant/trunk/libsylverant
+autoreconf --install
+./configure
+make all
+make install
+}}}
+
+5. Compile login_server
+{{{
+cd sylverant/trunk/login_server
+autoreconf --install
+./configure
+make all
+make install
+}}}
+
+6. Compile patch_server
+{{{
+cd sylverant/trunk/patch_server (Needed for PSO PC Players).
+autoreconf --install
+./configure
+make all
+make install
+}}}
+
+7. Compile ship_server
+{{{
+cd sylverant/trunk/ship_server
+touch config.rpath (seems automake 1.10 bug)
+autoreconf --install
+./configure --with-gnu-ld
+make all
+make install
+}}}
+
+8. Compile shipgate
+{{{
+cd sylverant/trunk/shipgate
+autoreconf --install
+./configure
+make all
+make install
+}}}
+
+9. Now, first thing is to put XML configuration files
+  * Create *"sylverant"* folder inside /usr/local/share/
+  * Create *"config"* folder inside /usr/local/share/sylverant
+  * Put the 4 xml files inside config folder (ship_config.xml, iselia_quests.xml, iselia_gms.xml, sylverant_config.xml).
+
+  * Create *"keys"* folder and put the Key file: iselia_key.bin
+  * Create *"info"* folder and put: about.txt, bugs.txt and bugreport.txt
+
+10. Next step is to edit XML data:
+
+*sylverant_config.xml*
+
+Database:
+
+host= 127.0.0.1 (or the remote address)
+user= root (or any other with privilegies)
+pass= the password
+db= pso (default database)
+port= 3306 (default MySQL one)
+
+Server:
+
+addr=Your external IP.
+port=12000 (Open the port!)
+
+*ship_config.xml*
+
+<shipgate ip="IP of shipgate" port="12000"/>
+<net port="12001" ip="IP of shipgate"/>
+
+11. After XML files, now we have to create the database and the tables in *MySQL*.
+
+*Note:* You can enter using cygwin as a client:
+
+{{{
+mysql -h 127.0.0.1 -u root -p
+
+create database pso;
+use pso;
+
+create table online_ships (ship_id int not null primary key, name varchar(20) not null, players long not null, ip long not null, port long not null, int_ip long not null);
+create table account_data (username varchar(20) not null primary key, password varchar(20) not null, email varchar(20), regtime long, isgm int, isactive int);
+create table guildcards (account_id int not null primary key);
+create table character_data (guildcard int not null primary key, slot long not null, data long, header varchar(20));
+create table dreamcast_clients (guildcard int not null primary key, serial_number varchar(20) not null, access_key varchar(20) not null, dc_id varchar(20) not null);
+
+show tables;
+exit;
+}}}
+
+12. *FINALLY!* Time to start our server!
+
+Start the *shipgate*:
+
+{{{
+cd sylverant/trunk/shipgate
+$ shipgate.exe
+Connecting to the database...
+Setting session wait_timeout...
+Clearing online ships...
+}}}
+
+13. In a new terminal, start the *ship_server*:
+
+{{{
+cd sylverant/trunk/ship_server
+$ ship_server.exe
+...
+}}}
