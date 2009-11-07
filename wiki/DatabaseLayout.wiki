@@ -1,0 +1,169 @@
+#summary The current layout of the database for Sylverant.
+#labels Phase-Deploy,Phase-Design,Phase-Implementation
+
+= Introduction =
+The database for Sylverant (needed on login servers and shipgates) consists of several tables, some of which are used currently, some of which aren't. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. The Blue Burst only tables are mostly adapted directly from Tethealla. Please note, these are all subject to change, and some have already changed several times.
+
+= Table account_data =
+The account_data table contains information on registered users of the server. Much of this information was used at the point when Sylverant supported Blue Burst, but isn't used quite as much. The create table used is as follows:
+
+{{{
+CREATE TABLE `account_data` (
+  `account_id` int(11) NOT NULL auto_increment,
+  `username` varchar(18) collate latin1_general_ci NOT NULL default '',
+  `password` varchar(33) collate latin1_general_ci NOT NULL default '',
+  `email` varchar(255) collate latin1_general_ci NOT NULL default '',
+  `regtime` int(11) unsigned NOT NULL default '0',
+  `lastip` varchar(16) collate latin1_general_ci NOT NULL default '',
+  `lasthwinfo` tinyblob,
+  `isgm` tinyint(2) NOT NULL default '0',
+  `isbanned` tinyint(2) NOT NULL default '0',
+  `islogged` tinyint(2) NOT NULL default '0',
+  `isactive` tinyint(2) NOT NULL default '0',
+  `teamid` int(11) NOT NULL default '-1',
+  `privlevel` mediumint(9) NOT NULL default '0',
+  `lastchar` tinyblob,
+  `dressflag` tinyint(1) NOT NULL default '0',
+  `lastship` varchar(12) collate latin1_general_ci default NULL,
+  `lastblock` tinyint(2) default NULL,
+  PRIMARY KEY  (`account_id`)
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table character_data =
+The character data table is currently not used in Sylverant. It was used to store Blue Burst character data.
+
+{{{
+CREATE TABLE `character_data` (
+  `guildcard` int(11) NOT NULL default '0',
+  `slot` tinyint(4) NOT NULL default '0',
+  `data` blob NOT NULL,
+  `header` tinyblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table dreamcast_clients =
+This table is obviously used to store Dreamcast clients for the server, and is also used for PC clients.
+
+{{{
+CREATE TABLE `dreamcast_clients` (
+  `guildcard` int(11) NOT NULL,
+  `serial_number` char(8) NOT NULL,
+  `access_key` char(8) NOT NULL,
+  `dc_id` char(8) NOT NULL,
+  PRIMARY KEY  (`guildcard`),
+  CONSTRAINT `dreamcast_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1
+}}}
+
+= Table guild_data =
+This is another Blue Burst only table, which was used for lists of guildcards.
+
+{{{
+CREATE TABLE `guild_data` (
+  `accountid` int(11) NOT NULL default '0',
+  `friendid` int(11) NOT NULL default '0',
+  `friendname` tinyblob NOT NULL,
+  `friendtext` blob NOT NULL,
+  `reserved` smallint(6) NOT NULL default '257',
+  `sectionid` smallint(6) NOT NULL default '0',
+  `class` smallint(6) NOT NULL default '0',
+  `comment` tinyblob NOT NULL,
+  `priority` smallint(6) NOT NULL default '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci 
+}}}
+
+= Table guildcards =
+This table is used to link accounts to their guildcards. Mostly used for Blue Burst, but also there for everything else.
+
+{{{
+CREATE TABLE `guildcards` (
+  `guildcard` int(11) NOT NULL auto_increment,
+  `account_id` int(11) default NULL,
+  PRIMARY KEY  (`guildcard`),
+  KEY `account_id` (`account_id`),
+  CONSTRAINT `guildcards_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account_data` (`account_id`) ON DELETE SET NULL
+) ENGINE=InnoDB AUTO_INCREMENT=1363 DEFAULT CHARSET=latin1
+}}}
+
+= Table hw_bans =
+This one is Blue Burst only, and was used for hardware bans.
+
+{{{
+CREATE TABLE `hw_bans` (
+  `guildcard` int(11) NOT NULL,
+  `hwinfo` tinyblob NOT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin
+}}}
+
+= Table ip_bans =
+Once again, Blue Burst only, use: obvious.
+
+{{{
+CREATE TABLE `ip_bans` (
+  `ipinfo` varchar(16) collate latin1_general_ci NOT NULL default ''
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table key_data =
+This is once again, Blue Burst only. This one stored the configuration of controls for a given account.
+
+{{{
+CREATE TABLE `key_data` (
+  `guildcard` int(11) NOT NULL default '0',
+  `controls` blob NOT NULL,
+  PRIMARY KEY  (`guildcard`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table online_ships =
+This one is actually used, and contains the list of currently online ships.
+
+{{{
+CREATE TABLE `online_ships` (
+  `name` varchar(12) collate latin1_general_ci NOT NULL,
+  `players` int(11) NOT NULL default '0',
+  `ip` int(10) unsigned NOT NULL,
+  `port` smallint(5) unsigned NOT NULL,
+  `int_ip` int(10) unsigned NOT NULL,
+  `ship_id` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`ship_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table security_data =
+This one is Blue Burst only, and is very wrong, but here for completeness.
+
+{{{
+CREATE TABLE `security_data` (
+  `guildcard` int(11) NOT NULL default '0',
+  `thirtytwo` int(11) NOT NULL default '0',
+  `sixtyfour` tinyblob NOT NULL,
+  `slotnum` tinyint(4) NOT NULL default '-1',
+  `isgm` int(11) NOT NULL default '0'
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table ship_data =
+This table contains the encryption keys of the ships allowed to connect to the shipgate.
+
+{{{
+CREATE TABLE `ship_data` (
+  `rc4key` tinyblob NOT NULL,
+  `idx` int(11) NOT NULL auto_increment,
+  PRIMARY KEY  (`idx`)
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
+
+= Table team_data =
+This is another Blue Burst-only table. This one was used to store information about teams.
+
+{{{
+CREATE TABLE `team_data` (
+  `name` tinyblob NOT NULL,
+  `owner` int(11) NOT NULL default '0',
+  `flag` blob NOT NULL,
+  `teamid` int(11) NOT NULL auto_increment,
+  PRIMARY KEY  (`teamid`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+}}}
