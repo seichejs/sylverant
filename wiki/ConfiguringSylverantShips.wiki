@@ -32,7 +32,7 @@ The various fields are explained below:
   * Number of blocks: Obvious.
   * Keyfile: An encryption key provided by the owner of the Shipgate.
   * GM File: The XML file to configure the list of GMs for this ship (described below)
-  * Base Ship Port: The port to start allocating ports for ship connections. The program will allocate (number of blocks + 1) * 2 ports currently, and this is subject to change.
+  * Base Ship Port: The port to start allocating ports for ship connections. The program will allocate (number of blocks + 1) `*` 2 ports currently, and this is subject to change.
   * Ship IP: The publicly accessible IP address for the ship.
   * Drops/Event/Exp: These currently aren't used, they were there for Blue Burst support, and will probably be brought back eventually.
   * Info: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal ASCII (technically Shift-JIS, but who's counting) text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement.
