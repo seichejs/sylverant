@@ -1,0 +1,84 @@
+#summary Instructions on how to configure Sylverant Ship Server and how files should be laid out.
+#labels Phase-Deploy
+
+= Introduction =
+
+Sylverant has various files that must be set up to configure the various parts of the Sylverant server. Generally, all Sylverant-related files are placed in /usr/local/share/sylverant (henceforth assumed to be in front of any paths), but this can be configured when you compile libsylverant.
+
+= Configuring Sylverant Ship Server =
+
+The base configuration file for configuring the Ship Server is called ship_config.xml, and is placed in the config directory. This file can be used to configure multiple ships per instance of Ship Server, but this functionality has not been thoroughly tested. The layout of this file is as follows:
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<ships>
+    <shipgate ip="Shipgate IP" port="Shipgate Port"/>
+    <ship name="Ship Name" blocks="Number of blocks" key="Keyfile" gms="GM File">
+        <net port="Base Ship Port" ip="Ship IP" />
+        <drops weapon="30" armor="20" mag="0.0001" tool="50" meseta="40" />
+        <event num="0" />
+        <exp rate="100" />
+        <info file="Filename" desc="Description" />
+        <quests file="Quest File" />
+    </ship>
+</ships>
+}}}
+
+The various fields are explained below:
+  * Shipgate IP: The IP Address of the Shipgate to connect to.
+  * Shipgate Port: The port to connect to the Shipgate on.
+  * Ship Name: The name you wish to call your ship. This should be less than 16 characters in length.
+  * Number of blocks: Obvious.
+  * Keyfile: An encryption key provided by the owner of the Shipgate.
+  * GM File: The XML file to configure the list of GMs for this ship (described below)
+  * Base Ship Port: The port to start allocating ports for ship connections. The program will allocate (number of blocks + 1) * 2 ports currently, and this is subject to change.
+  * Ship IP: The publicly accessible IP address for the ship.
+  * Drops/Event/Exp: These currently aren't used, they were there for Blue Burst support, and will probably be brought back eventually.
+  * Info: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal ASCII (technically Shift-JIS, but who's counting) text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement.
+  * Quest File: The list of quests that are available on the server (described below).
+
+== GM Configuration ==
+
+The GM configuration file is a simple XML list of serial number/access key/guildcard sets for the users that should have GM permissions on the ship. I call the file iselia_gms.xml for the Iselia ship, but once again, this is configurable in the ship_config.xml file above.
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<gms>
+    <gm serial="Serial Number" accesskey="Access Key" guildcard="Guild Card" />
+</gms>
+}}}
+
+For each person in the list, you must place each element in its prescribed place. You can provide multiple GMs in the file (and probably will). The pieces in and of themselves are self explanatory.
+
+== Quest Configuration ==
+
+The Quest configuration file is an XML list of categories/quests that are available on your ship. An example is shown below. 
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<quests>
+    <category name="VR">
+        <description>These are quests
+where you battle
+enemies in a
+virtual room.</description>
+        <quest name="Towards the Future" prefix="q118" v1="false" v2="true"
+         gc="false" bb="false">
+            <short>The enemy simulator
+is complete.
+Challenge the other
+hunters.</short>
+            <long>Client:  Principal
+Quest:
+ The enemy simulator is complete.
+ Challenge the other hunters.
+Reward:  ??? Meseta</long>
+        </quest>
+    </category>
+</quests>
+}}}
+
+You can configure multiple categories, and multiple quests per category. In this case, only one category, with one quest has been configured. The quest itself will be in the quests subdirectory of the Sylverant directory. In this case, only PSOv2 (and PSOPC) are supported. A quest that is supported in v2 must be supported in PSOPC at the moment. All the others are independent. The files for this quest would be called q118v2.dat, q118v2.bin, q118pc.dat, q118pc.bin. These quests are in what Qedit refers to as Kohle basic layout. Version 1 quests will end with v1, Version 2 will end with v2, PC will end with pc, and so forth. Hopefully everything else should be obvious.
