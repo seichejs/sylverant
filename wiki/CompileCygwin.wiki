@@ -91,24 +91,9 @@ make install
 
 10. Next step is to edit XML data:
 
-*sylverant_config.xml*
+See [ConfiguringSylverantShips] for information about how to configure Sylverant Ship Server.
 
-  * Change database tag:
-    * host = 127.0.0.1 (or the remote address)
-    * user = root (or any other with privilegies)
-    * pass = the password...
-    * db = pso (default database)
-    * port = 3306 (default MySQL port)
-
-  * Change server tag:
-    * addr = Your external IP.
-    * port = 12000 (Open the port in your router!)
-
-*ship_config.xml*
-
-  * Change the IP and port of the shipgate entry with the shipgate ones.
-  * Change the IP and port of net port.
-  * Modify your ship: Name, Quests filename, GMs filename, Key filename...
+See [ConfiguringSylverant] for information about how to configure Sylverant Login/Patch Server and Shipgate.
 
 11. After XML files, now we have to create the PSO Database and Tables in *MySQL*.
 
