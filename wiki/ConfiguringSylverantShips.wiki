@@ -27,7 +27,7 @@ The base configuration file for configuring the Ship Server is called ship_confi
 
 The various fields are explained below:
   * Shipgate IP: The IP Address of the Shipgate to connect to.
-  * Shipgate Port: The port to connect to the Shipgate on.
+  * Shipgate Port: The port to connect to the Shipgate on. Currently this must be 3455.
   * Ship Name: The name you wish to call your ship. This should be less than 16 characters in length.
   * Number of blocks: Obvious.
   * Keyfile: An encryption key provided by the owner of the Shipgate.
