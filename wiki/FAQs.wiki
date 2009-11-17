@@ -1,0 +1,7 @@
+#summary Frequently asked questions about Sylverant.
+#labels Phase-Implementation,Phase-Design,Phase-Deploy,Phase-Support
+
+= Why can't any PSOPC users seem to connect to my server? =
+Sylverant does not allow users of PSOPC to connect to the server unless they have been previously registered. This decision was made for two reasons: firstly, its my belief that very few PSOPC users will probably be using actual real serial number/access key pairs, and secondly (building off of the first reason) due to how Sylverant doles out Guild Cards to unknown clients. With a blank serial number/access key, all PSOPC clients will be given the same guild card number, which will cause some obvious problems.
+
+In order for a PSOPC client to connect, they must have an entry in the dreamcast_clients table of the database (and an assigned guildcard from an entry in the guildcards table). This entry should have the serial number of the client and the access key filled in (convert the serial from decimal to hex) and a dcid of '0'.
