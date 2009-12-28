@@ -20,3 +20,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /kill `[`guildcard`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. This *does not* ban the user from the server.
   * /warp `[`area`]` -- Warp to the specified map. `[`area`]` is a required field, and must be between 0 and 17. This command does not work on PSOv1. Although you can execute this command on a non-game lobby (currently), it is not recommended to do so.
   * /refresh `[`what`]` -- Refresh some server data. `[`what`]` is a required field and must either be the string "gms" or "quests" (currently). It should be obvious what each does.
+  * /bcast `[`message`]` -- Send a global message to all players on the current ship.
