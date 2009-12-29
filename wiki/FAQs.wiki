@@ -15,9 +15,11 @@ Here is the list of currently available commands for regular users on the Sylver
   * /minlvl `[`level`]` -- Set the minimum required level for the current game lobby. `[`level`]` is required, and must be greater than or equal to the level specified by the game for the difficulty of the game. This command only affects new clients attempting to enter the game, and will not kick anyone currently in the game out. This command can only be executed in a game lobby, not a default lobby. Also, this command is only available to the current team leader.
   * /maxlvl `[`level`]` -- Set the maximum allowed level for the current game lobby. `[`level`]` is required, and must be greater than or equal to the minimum level for the current game lobby. This command only affects new clients attempting to enter the game, and will not kick anyone currently in the game out. This command can only be executed by the team leader and only in a game lobby.
   * /bstat -- Get the number of players and games currently active on the block that you are on. This can be used in a game lobby or a default lobby.
+  * /arrow `[`colornumber`]` -- Set the arrow above your head in the lobby (0 = off, max is 10).
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. This *does not* ban the user from the server.
   * /warp `[`area`]` -- Warp to the specified map. `[`area`]` is a required field, and must be between 0 and 17. This command does not work on PSOv1. Although you can execute this command on a non-game lobby (currently), it is not recommended to do so.
   * /refresh `[`what`]` -- Refresh some server data. `[`what`]` is a required field and must either be the string "gms" or "quests" (currently). It should be obvious what each does.
   * /bcast `[`message`]` -- Send a global message to all players on the current ship.
+  * /login `[`username`]` `[`password`]` -- Login as a global GM, granting full GM privileges on the ship if login is successful.
