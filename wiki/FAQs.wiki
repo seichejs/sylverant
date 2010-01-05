@@ -16,6 +16,7 @@ Here is the list of currently available commands for regular users on the Sylver
   * /maxlvl `[`level`]` -- Set the maximum allowed level for the current game lobby. `[`level`]` is required, and must be greater than or equal to the minimum level for the current game lobby. This command only affects new clients attempting to enter the game, and will not kick anyone currently in the game out. This command can only be executed by the team leader and only in a game lobby.
   * /bstat -- Get the number of players and games currently active on the block that you are on. This can be used in a game lobby or a default lobby.
   * /arrow `[`colornumber`]` -- Set the arrow above your head in the lobby (0 = off, max is 10).
+  * /v1 -- Set PSOv1 compatibility mode for a lobby. This will only work in PSOv2 lobbies and is intended to allow PSOPC players to make games that PSOv1 players can join.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. This *does not* ban the user from the server.
@@ -25,3 +26,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /login `[`username`]` `[`password`]` -- Login as a global GM, granting full GM privileges on the ship if login is successful.
   * /item `[`item1`]`,`[`item2`]`,`[`item3`]`,`[`item4`]` -- Set the next item that will be generated when *your character* hits a box. `[`item1`]` is the only strictly necessary argument here, the rest will default to 0. Note, these are all 32-bit hex values. If you change your mind, to clear it out, make `[`item1`]` be 0 by using this command again. There are only commas between the arguments, no spaces!
   * /item4 `[`item4`]` -- Set the 4th 32-bit hex value for the next item to be generated. Most versions of PSO don't give you enough space to put in all 4 things in the above command, if you need to use all digits, but you will have enough for at least 3. This is to set the last one, if you run out of room.
+  * /event `[`event code`]` -- Set the current event in lobbies (default lobbies will be updated immediately (default lobby events are not supported on PSOPC/PSODC, apparently), only game lobbies created after this command is used will get the new event).
