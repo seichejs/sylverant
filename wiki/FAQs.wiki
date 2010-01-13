@@ -17,6 +17,8 @@ Here is the list of currently available commands for regular users on the Sylver
   * /bstat -- Get the number of players and games currently active on the block that you are on. This can be used in a game lobby or a default lobby.
   * /arrow `[`colornumber`]` -- Set the arrow above your head in the lobby (0 = off, max is 10).
   * /v1 -- Set PSOv1 compatibility mode for a lobby. This will only work in PSOv2 lobbies and is intended to allow PSOPC players to make games that PSOv1 players can join.
+  * /lname `[`new lobby name`]` -- Set the name of a game lobby. Only the party leader can use this command.
+  * /passwd `[` new lobby password `]` -- Set a new password on a game lobby. Only the party leader can use this command.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. This *does not* ban the user from the server.
