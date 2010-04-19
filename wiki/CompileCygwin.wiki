@@ -11,7 +11,9 @@ I.e: know how to get a SVN copy, and how to use make tools and a little about My
 
 = Steps =
 
-You will need *Cygwin 1.7* (beta!) or a newer version. (Note: You can install 1.7 and 1.5 versions in the same computer).
+You will need *Cygwin 1.7* or a newer version. Latest Cygwin DLL release version is 1.7.5-1.
+
+== Compile phase ==
 
 1. Install Cygwin and add the following packages (with their dependences):
 
@@ -82,39 +84,154 @@ make all
 make install
 }}}
 
-9. Now, first thing is to put XML configuration files:
+== Configure phase ==
+
+9. Create config structure:
   * Create *"sylverant"* folder inside /usr/local/share/
   * Create *"config"* folder inside /usr/local/share/sylverant
   * Put the 4 XML files inside config folder (ship_config.xml, quests.xml, gms.xml, sylverant_config.xml).
-  * Create *"keys"* folder and put the Key file: key.bin
-  * Create *"info"* folder and put: about.txt, bugs.txt and bugreport.txt
+  * Create *"keys"* folder.
+  * Create *"info"* folder.
 
-10. Next step is to edit XML data:
+  * Optional: Create text files inside info folder (about.txt, bugs.txt and bugreport.txt)
+  * Optional: Create *"patches"* folder.
+  * Optional: Create "patch_welcome" file (no extension) inside config folder.
+
+10. Edit XML data:
 
 See [ConfiguringSylverantShips] for information about how to configure Sylverant Ship Server.
 
 See [ConfiguringSylverant] for information about how to configure Sylverant Login/Patch Server and Shipgate.
 
-11. After XML files, now we have to create the PSO Database and Tables in *MySQL*.
+*Tip:* Here is another example to set a server:
+
+sylverant_config.xml
+{{{
+<database type="mysql" host="127.0.0.1" user="root" pass="my.sql.pass" db="pso" port="3306" />
+<server addr="use.internal.ip" port="12000" netmask="255.255.255.0" override="use.public.ip"/> //Port must be 12000
+}}}
+
+ship_config.xml
+{{{
+<shipgate ip="127.0.0.1" port="3455"/> //Port must be 3455
+<net port="12001" ip="use.public.ip"/>
+}}}
+
+11. Create the "pso" database and their tables in the *MySQL* server (you can use the SQL script).
 
 See [DatabaseLayout] for information about the layout of the tables in Sylverant.
 
-12. *FINALLY!* Time to start our server!
+*Tip:* Use Cygwin to connect to your MySQL server like:
+{{{
+mysql -h 127.0.0.1 -uroot -psomepass (pso < psoscript.sql)
+}}}
 
-Start the *shipgate*:
+12. For every PSO PC user, you have to add it to the database:
 
 {{{
-cd sylverant/trunk/shipgate
+mysql> INSERT INTO guildcards VALUES (idcard,idaccount);
+mysql> INSERT INTO pc_clients VALUES (idcard,"serial","key");
+}}}
+
+See [FAQs] for more information about how to add a PSOPC player.
+
+13. Generate Server Key:
+
+{{{
+shipkey_gen.exe
+}}}
+
+It will create a new entry inside ship_data table.
+
+14. Copy *ship_key.bin* file inside keys folder.
+
+15. Remember to open your Router / Firewall ports! A range 9000-12100 TCP/UDP is more than enough for DC, PC and GC players.
+
+== Execute phase ==
+
+*FINALLY!!!* Time to start our server!
+
+*IMPORTANT* Execute the programs in the following order: login_server.exe, shipgate.exe, ship_server.exe, patch_server.exe
+
+16. Start the *login_server*:
+
+{{{
+$ login_server.exe
+[2010:04:18: 16:46:42.515]: Connecting to the database...
+[2010:04:18: 16:46:42.515]: Opening Dreamcast port (9200) for connections.
+[2010:04:18: 16:46:42.515]: Opening PC port (9300) for connections.
+[2010:04:18: 16:46:42.515]: Opening GC port (9100) for connections.
+}}}
+
+*Tip:* If cygwin gives a *segmentation fault* error, in login_server.c file change:
+{{{
+select(nfds+1,...);
+}}}
+for the next part:
+{{{
+select(FD_SETSIZE,...);
+}}}
+Recompile, install and execute again.
+
+*Developer Tip:* If you want to know what commands mean, take a look at login_packets.h
+
+
+17. Start the *shipgate*:
+
+{{{
 $ shipgate.exe
-Connecting to the database...
-Setting session wait_timeout...
-Clearing online ships...
+[2010:04:18: 16:46:42.515]: Connecting to the database...
+[2010:04:18: 16:46:42.515]: Setting session wait_timeout...
+[2010:04:18: 16:46:42.515]: Clearing online ships...
 }}}
 
-13. In a new terminal, start the *ship_server*:
+18. Start the *ship_server*:
 
 {{{
-cd sylverant/trunk/ship_server
 $ ship_server.exe
-...
+[2010:04:18: 16:04:58.562]: Loading Sylverant Ship configuration file...
+[2010:04:18: 16:04:58.567]: Ok
+[2010:04:18: 16:04:58.567]: Configured parameters:
+[2010:04:18: 16:04:58.567]: Shipgate IP: 192.168.0.2
+[2010:04:18: 16:04:58.568]: Shipgate Port: 3455
+[2010:04:18: 16:04:58.568]: Number of Ships: 1
+[2010:04:18: 16:04:58.568]: Ship Name: A random name
+[2010:04:18: 16:04:58.568]: Ship IP: use.public.ip
+[2010:04:18: 16:04:58.568]: Base Port: 12001
+[2010:04:18: 16:04:58.568]: Blocks: 2
+[2010:04:18: 16:04:58.568]: Event: 0
+[2010:04:18: 16:04:58.568]: Experience Rate: 100.000000
+[2010:04:18: 16:04:58.568]: Weapon drop rate: 30.000000
+[2010:04:18: 16:04:58.568]: Armor drop rate: 20.000000
+[2010:04:18: 16:04:58.569]: Mag drop rate: 0.000100
+[2010:04:18: 16:04:58.569]: Tool drop rate: 50.000000
+[2010:04:18: 16:04:58.569]: Meseta drop rate: 40.000000
+
+[2010:04:18: 16:04:58.727]: Starting server for ship A random name...
+[2010:04:18: 16:04:58.729]: Loading shipgate key...
+[2010:04:18: 16:04:58.731]: Connecting to shipgate...
 }}}
+
+  * If it says: Connection refused
+    * Shipgate is OFF (turn ON)
+    * Server does not found the IP
+    * The port is not 3455 (use 3455)
+  * If it says: SHIPNAME: Lost connection with shipgate, the ship_gate does not have the key file.
+
+19. Optional: Start the *patch_server*:
+
+{{{
+$ patch_server.exe
+[2010:04:19: 21:09:55.703]: Loading Sylverant configuration file... 
+[2010:04:19: 21:09:55.704]: Ok
+[2010:04:19: 21:09:55.704]: Configured parameters:
+[2010:04:19: 21:09:55.705]: Server (bound) IP: use.public.ip
+[2010:04:19: 21:09:55.705]: Loading welcome message file... 
+[2010:04:19: 21:09:55.723]: Ok (13 bytes)
+[2010:04:19: 21:09:55.723]: Building patch list...
+[2010:04:19: 21:09:55.724]: Ok
+[2010:04:19: 21:09:55.724]: Installing SIGUSR1 handler... 
+[2010:04:19: 21:09:55.724]: Ok
+}}}
+
+  * If it says: bind: Cannot assign requested address, it means that it is reading the external IP from sylverant_config.xml. It has to be a private IP.
