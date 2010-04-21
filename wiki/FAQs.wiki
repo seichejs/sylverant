@@ -6,7 +6,7 @@
 = Why can't any PSOPC users seem to connect to my server? =
 Sylverant does not allow users of PSOPC to connect to the server unless they have been previously registered. This decision was made for two reasons: firstly, its my belief that very few PSOPC users will probably be using actual real serial number/access key pairs, and secondly (building off of the first reason) due to how Sylverant doles out Guild Cards to unknown clients. With a blank serial number/access key, all PSOPC clients will be given the same guild card number, which will cause some obvious problems.
 
-In order for a PSOPC client to connect, they must have an entry in the dreamcast_clients table of the database (and an assigned guildcard from an entry in the guildcards table). This entry should have the serial number of the client and the access key filled in (convert the serial from decimal to hex) and a dcid of '0'.
+In order for a PSOPC client to connect, they must have an entry in the pc_clients table of the database, an assigned guildcard in the guildcards table, as well as a full entry in the account_data table. The pc_clients entry should have the serial number of the client and the access key filled in (convert the serial from decimal to hex).
 
 = What commands are available to users on Sylverant? =
 Here is the list of currently available commands for regular users on the Sylverant ship server:
@@ -16,7 +16,6 @@ Here is the list of currently available commands for regular users on the Sylver
   * /maxlvl `[`level`]` -- Set the maximum allowed level for the current game lobby. `[`level`]` is required, and must be greater than or equal to the minimum level for the current game lobby. This command only affects new clients attempting to enter the game, and will not kick anyone currently in the game out. This command can only be executed by the team leader and only in a game lobby.
   * /bstat -- Get the number of players and games currently active on the block that you are on. This can be used in a game lobby or a default lobby.
   * /arrow `[`colornumber`]` -- Set the arrow above your head in the lobby (0 = off, max is 10).
-  * /v1 -- Set PSOv1 compatibility mode for a lobby. This will only work in PSOv2 lobbies and is intended to allow PSOPC players to make games that PSOv1 players can join.
   * /lname `[`new lobby name`]` -- Set the name of a game lobby. Only the party leader can use this command.
   * /passwd `[`new lobby password`]` -- Set a new password on a game lobby. Only the party leader can use this command.
   * /bug -- Send user information about reporting a bug.
@@ -31,5 +30,12 @@ Here is the list of currently available commands for regular users on the Sylver
   * /item `[`item1`]`,`[`item2`]`,`[`item3`]`,`[`item4`]` -- Set the next item that will be generated when *your character* hits a box. `[`item1`]` is the only strictly necessary argument here, the rest will default to 0. Note, these are all 32-bit hex values. If you change your mind, to clear it out, make `[`item1`]` be 0 by using this command again. There are only commas between the arguments, no spaces!
   * /item4 `[`item4`]` -- Set the 4th 32-bit hex value for the next item to be generated. Most versions of PSO don't give you enough space to put in all 4 things in the above command, if you need to use all digits, but you will have enough for at least 3. This is to set the last one, if you run out of room.
   * /event `[`event code`]` -- Set the current event in lobbies (default lobbies will be updated immediately (default lobby events are not supported on PSOPC/PSODC, apparently), only game lobbies created after this command is used will get the new event).
-  * /clinfo `[`client id`]` -- Get some information about a client (name, guildcard, IP address, class and level), which can be useful for administrative commands like /kill.
+  * /clinfo `[`client id`]` -- Get some information about a client (name, guildcard, IP address, class and level), which can be useful for administrative commands like /kill. Note that the `[`client id`]` is the index of the player in the lobby -- NOT their guildcard number.
   * /gban:d `[`guildcard`]` `[`reason`]` -- Ban the specified user from the server (globally) for one day. Also available are /gban:w (ban for one week), /gban:m (ban for 1 month), and /gban:p (Permanently ban). This will implicitly /kill the player as well if they're currently connected.
+  * /list `[`domain`]` `[`arguments`]` -- List all players in the given domain (l for current lobby, b for current block, s for current ship) that satisfy the list of arguments as well as various information about them (guildcard number, IP address, lobby, etc). The list of arguments can include several types of specifiers (separated by spaces) including:
+    * p `[`number`]`: The page number of results to display.
+    * n `[`name regular expression`]`: A POSIX-style regular expression to run against the names of clients. This is case-insensitive.
+    * mnlv `[`level`]`: The minimum level of characters to display.
+    * mxlv `[`level`]`: The maximum level of characters to display.
+    * lv `[`level`]`: Only display characters of the specified level (a shortcut for specifying mxlv and mnlv with the same value).
+    * c `[`class`]`: The class of the character (case-insensitive).
