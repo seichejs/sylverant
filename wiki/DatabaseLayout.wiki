@@ -27,23 +27,46 @@ CREATE TABLE `account_data` (
   `lastship` varchar(12) collate latin1_general_ci default NULL,
   `lastblock` tinyint(2) default NULL,
   PRIMARY KEY  (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+}}}
+
+= Table bans =
+The bans table is used for storing information related to a ban. This can be either a guildcard-level or IP level ban.
+
+{{{
+CREATE TABLE `bans` (
+  `ban_id` int(11) NOT NULL auto_increment,
+  `reason` varchar(256) default NULL,
+  `startdate` int(10) unsigned NOT NULL default '0',
+  `enddate` int(10) unsigned NOT NULL default '4294967295',
+  `setby` int(11) default NULL,
+  PRIMARY KEY  (`ban_id`),
+  KEY `setby` (`setby`),
+  CONSTRAINT `bans_ibfk_1` FOREIGN KEY (`setby`) REFERENCES `account_data` (`account_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Trigger ban_start =
+This trigger sets the start time of the ban to the current time when the ban is put into place.
+
+{{{
+CREATE TRIGGER `ban_start` BEFORE INSERT ON `bans` FOR EACH ROW set new.startdate = UNIX_TIMESTAMP();
 }}}
 
 = Table character_data =
-The character data table is currently not used in Sylverant. It was used to store Blue Burst character data.
+The character_data table is used to store character data that is saved with the /save command on the server. It was also used to store Blue Burst character data as well.
 
 {{{
 CREATE TABLE `character_data` (
   `guildcard` int(11) NOT NULL default '0',
   `slot` tinyint(4) NOT NULL default '0',
   `data` blob NOT NULL,
-  `header` tinyblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+  `header` tinyblob
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table dreamcast_clients =
-This table is obviously used to store Dreamcast clients for the server, and is also used for PC clients.
+This table is obviously used to store Dreamcast clients for the server. PC clients now have their own table.
 
 {{{
 CREATE TABLE `dreamcast_clients` (
@@ -52,8 +75,21 @@ CREATE TABLE `dreamcast_clients` (
   `access_key` char(8) NOT NULL,
   `dc_id` char(8) NOT NULL,
   PRIMARY KEY  (`guildcard`),
-  CONSTRAINT `dreamcast_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+  CONSTRAINT `dreamcast_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Table gamecube_clients=
+This table is used to store the serial number and access keys for Gamecube clients on the server.
+
+{{{
+CREATE TABLE `gamecube_clients` (
+  `guildcard` int(11) NOT NULL,
+  `serial_number` char(8) NOT NULL,
+  `access_key` char(12) NOT NULL,
+  PRIMARY KEY  (`guildcard`),
+  CONSTRAINT `gamecube_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
 = Table guild_data =
@@ -70,11 +106,25 @@ CREATE TABLE `guild_data` (
   `class` smallint(6) NOT NULL default '0',
   `comment` tinyblob NOT NULL,
   `priority` smallint(6) NOT NULL default '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci 
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+}}}
+
+= Table guildcard_bans =
+This table is used to set bans on a guildcard at the shipgate level.
+
+{{{
+CREATE TABLE `guildcard_bans` (
+  `ban_id` int(11) NOT NULL,
+  `guildcard` int(11) NOT NULL,
+  PRIMARY KEY  (`ban_id`),
+  KEY `guildcard` (`guildcard`),
+  CONSTRAINT `guildcard_bans_ibfk_1` FOREIGN KEY (`ban_id`) REFERENCES `bans` (`ban_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `guildcard_bans_ibfk_2` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
 = Table guildcards =
-This table is used to link accounts to their guildcards. Mostly used for Blue Burst, but also there for everything else.
+This table is used to link accounts to their guildcards.
 
 {{{
 CREATE TABLE `guildcards` (
@@ -82,8 +132,8 @@ CREATE TABLE `guildcards` (
   `account_id` int(11) default NULL,
   PRIMARY KEY  (`guildcard`),
   KEY `account_id` (`account_id`),
-  CONSTRAINT `guildcards_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account_data` (`account_id`) ON DELETE SET NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1363 DEFAULT CHARSET=latin1
+  CONSTRAINT `guildcards_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account_data` (`account_id`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
 }}}
 
 = Table hw_bans =
@@ -93,16 +143,19 @@ This one is Blue Burst only, and was used for hardware bans.
 CREATE TABLE `hw_bans` (
   `guildcard` int(11) NOT NULL,
   `hwinfo` tinyblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
 }}}
 
 = Table ip_bans =
-Once again, Blue Burst only, use: obvious.
+This table is used to set a ban on an IP address at the shipgate level.
 
 {{{
 CREATE TABLE `ip_bans` (
-  `ipinfo` varchar(16) collate latin1_general_ci NOT NULL default ''
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+  `ban_id` int(11) NOT NULL,
+  `addr` int(10) unsigned NOT NULL,
+  PRIMARY KEY  (`ban_id`),
+  CONSTRAINT `ip_bans_ibfk_1` FOREIGN KEY (`ban_id`) REFERENCES `bans` (`ban_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
 = Table key_data =
@@ -113,7 +166,7 @@ CREATE TABLE `key_data` (
   `guildcard` int(11) NOT NULL default '0',
   `controls` blob NOT NULL,
   PRIMARY KEY  (`guildcard`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table online_ships =
@@ -127,8 +180,35 @@ CREATE TABLE `online_ships` (
   `port` smallint(5) unsigned NOT NULL,
   `int_ip` int(10) unsigned NOT NULL,
   `ship_id` int(10) unsigned NOT NULL,
+  `gm_only` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`ship_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+}}}
+
+= Table passwd_resets =
+This table is used by the website to manage requests for a password reset.
+
+{{{
+CREATE TABLE `passwd_resets` (
+  `account_id` int(11) NOT NULL,
+  `uuid` char(36) NOT NULL,
+  `req_time` timestamp NOT NULL default CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`account_id`),
+  CONSTRAINT `passwd_resets_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account_data` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Table pc_clients =
+This table is used to store the serial number and access key for PC clients.
+
+{{{
+CREATE TABLE `pc_clients` (
+  `guildcard` int(11) NOT NULL,
+  `serial_number` char(8) NOT NULL,
+  `access_key` char(8) NOT NULL,
+  PRIMARY KEY  (`guildcard`),
+  CONSTRAINT `pc_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
 = Table security_data =
@@ -141,7 +221,7 @@ CREATE TABLE `security_data` (
   `sixtyfour` tinyblob NOT NULL,
   `slotnum` tinyint(4) NOT NULL default '-1',
   `isgm` int(11) NOT NULL default '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table ship_data =
@@ -152,7 +232,7 @@ CREATE TABLE `ship_data` (
   `rc4key` tinyblob NOT NULL,
   `idx` int(11) NOT NULL auto_increment,
   PRIMARY KEY  (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table team_data =
@@ -165,5 +245,5 @@ CREATE TABLE `team_data` (
   `flag` blob NOT NULL,
   `teamid` int(11) NOT NULL auto_increment,
   PRIMARY KEY  (`teamid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
