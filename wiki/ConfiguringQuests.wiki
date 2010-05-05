@@ -1,0 +1,34 @@
+#summary How to set up Sylverant to serve offline quests in the login server.
+#labels Phase-Deploy
+
+= Introduction =
+
+Sylverant login server can serve up downloadable quests to clients on all supported versions of PSO, much like Sega's servers did. This page will describe how to set this up and get it working properly.
+
+
+= Directory Layout =
+
+The login server configuration (as described in ConfiguringSylverant) specifies where the root of the offline quests tree will be based on the `<quests>` tag. This directory will contain several subdirectories for all versions and languages of PSO that you wish to serve up downloadable quests for. Any missing directories will be ignored. The subdirectory names are based on an abbreviation of the version of PSO (dc (for Dreamcast PSOv1/PSOv2), pc (for PSOPC), and gc (for Gamecube)), and the language (en (English), sp (Spanish), fr (French), de (German), jp (Japanese), ct (Chinese, Traditional), cs (Chinese, Simplified), kr (Korean)). Note that some of these pairs (such as dc-ct, dc-cs, dc-kr) don't actually exist in practice (the Dreamcast versions did not support Chinese or Korean), so should be omitted.
+
+In order for a directory to be checked, it must exist inside the root of the tree, contain a quests.xml file that will specify what quests are available, and of course it must contain quest files. The quests.xml file is of the same format as what is used to configure the ship server's quest support (see [ConfiguringSylverantShips#Quest_Configuration Quest Configuration]), with a few simplifications. First of all, with the exception of for the Dreamcast version of PSO, the various versions are ignored in the `<quest>` tags. Also, there is no need to provide a `<long>` description of the quest as it will never be seen in the client. Quests that are in a given subdirectory are assumed to be compatible with the version of PSO specified, so be sure to not put something in a subdirectory that does not belong.
+
+The quest files in each subdirectory are in a schtserv-style .qst format (which is what Qedit will give you if you pick the Downloadable quest file option while saving). This is different than what is done for the ship server, and is done for simplicity (note, I will probably add .qst support to the ship server sometime as well).
+
+An example of the directory layout is as follows (note that not all quests have to be provided for all pairs, even within a platform, different languages can have different options):
+  * /usr/local/share/sylverant
+    * offline_quests (as specified in the sylverant_config.xml)
+      * dc-en
+        * quests.xml
+        * quest15.qst
+        * quest16.qst
+        * quest19.qst
+      * dc-sp
+        * quests.xml
+        * quest15.qst
+      * pc-en
+        * quests.xml
+        * quest16.qst
+      * gc-en
+        * quests.xml
+        * quest284.qst
+        * quest477.qst
