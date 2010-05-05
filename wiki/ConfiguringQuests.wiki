@@ -32,3 +32,34 @@ An example of the directory layout is as follows (note that not all quests have 
         * quests.xml
         * quest284.qst
         * quest477.qst
+
+= Example quests.xml File =
+
+Below is an example quests.xml file corresponding to the dc-en directory in the above tree example layout.
+
+{{{
+<?xml version="1.0" encoding="UTF-8"?>
+
+<quests>
+    <category name="Offline Quests">
+        <description>Offline quests</description>
+        <quest name="Soul of a Blacksmith" prefix="quest15" v1="true">
+            <short>A blacksmith
+wants to make
+a weapon using
+Ragol's unknown
+materials.</short>
+        </quest>
+        <quest name="Letter from Lionel" prefix="quest16" v1="true">
+            <short>A mysterious letter
+was delivered to
+the Hunter's Guild.</short>
+        </quest>
+        <quest name="The Retired Hunter" prefix="quest19" v1="true">
+            <short>I will kill
+10000 monsters
+before I die!</short>
+        </quest>
+    </category>
+</quests>
+}}}
