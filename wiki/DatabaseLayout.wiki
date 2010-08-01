@@ -21,7 +21,7 @@ CREATE TABLE `account_data` (
   `islogged` tinyint(2) NOT NULL default '0',
   `isactive` tinyint(2) NOT NULL default '0',
   `teamid` int(11) NOT NULL default '-1',
-  `privlevel` mediumint(9) NOT NULL default '0',
+  `privlevel` int(10) unsigned NOT NULL default '0',
   `lastchar` tinyblob,
   `dressflag` tinyint(1) NOT NULL default '0',
   `lastship` varchar(12) collate latin1_general_ci default NULL,
