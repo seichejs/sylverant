@@ -3,10 +3,12 @@
 
 <wiki:toc max_depth="1" />
 
-= Why can't any PSOPC users seem to connect to my server? =
+= Why can't any PSOPC/PSOGC users seem to connect to my server? =
 Sylverant does not allow users of PSOPC to connect to the server unless they have been previously registered. This decision was made for two reasons: firstly, its my belief that very few PSOPC users will probably be using actual real serial number/access key pairs, and secondly (building off of the first reason) due to how Sylverant doles out Guild Cards to unknown clients. With a blank serial number/access key, all PSOPC clients will be given the same guild card number, which will cause some obvious problems.
 
 In order for a PSOPC client to connect, they must have an entry in the pc_clients table of the database, an assigned guildcard in the guildcards table, as well as a full entry in the account_data table. The pc_clients entry should have the serial number of the client and the access key filled in (convert the serial from decimal to hex).
+
+PSOGC users also need valid accounts, and must be noted in the gamecube_clients table of the database, much like PSOPC users.
 
 = What commands are available to users on Sylverant? =
 Here is the list of currently available commands for regular users on the Sylverant ship server:
@@ -19,6 +21,8 @@ Here is the list of currently available commands for regular users on the Sylver
   * /lname `[`new lobby name`]` -- Set the name of a game lobby. Only the party leader can use this command.
   * /passwd `[`new lobby password`]` -- Set a new password on a game lobby. Only the party leader can use this command.
   * /bug -- Send user information about reporting a bug.
+  * /legit -- This command is only available in game lobbies, and triggers a legit check on the whole team. If the legit check passes (according to the rules on the server), the legit flag is set on the game, which makes it so that anyone coming in must pass the legit check as well. This command can only be used by the party leader.
+  * /normal -- Undo the /legit command, if the flag actually got set on the lobby. This command can only be used by the party leader.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server.
@@ -39,3 +43,4 @@ Here is the list of currently available commands for regular users on the Sylver
     * mxlv `[`level`]`: The maximum level of characters to display.
     * lv `[`level`]`: Only display characters of the specified level (a shortcut for specifying mxlv and mnlv with the same value).
     * c `[`class`]`: The class of the character (case-insensitive).
+  * /shutdown `[`minutes`]` -- This command is only available to global and local root users, and schedules the ship for a graceful shutdown in the specified number of minutes. It broadcasts a message to all users that the ship is going down for shutdown, and makes the ship not accept any further incoming connections.
