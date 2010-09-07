@@ -44,3 +44,5 @@ Here is the list of currently available commands for regular users on the Sylver
     * lv `[`level`]`: Only display characters of the specified level (a shortcut for specifying mxlv and mnlv with the same value).
     * c `[`class`]`: The class of the character (case-insensitive).
   * /shutdown `[`minutes`]` -- This command is only available to global and local root users, and schedules the ship for a graceful shutdown in the specified number of minutes. It broadcasts a message to all users that the ship is going down for shutdown, and makes the ship not accept any further incoming connections.
+  * /log `[`guildcard`]` -- Start logging all packets sent to or from the specified guildcard. You must be a local or global root to use this command.
+  * /endlog `[`guildcard`]` -- Stop logging packets on a client that has had packets logged by running the /log command. Like that command, you must be a local or global root to use this command.
