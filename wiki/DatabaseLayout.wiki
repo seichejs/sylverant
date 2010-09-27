@@ -227,12 +227,13 @@ CREATE TABLE `security_data` (
 }}}
 
 = Table ship_data =
-This table contains the encryption keys of the ships allowed to connect to the shipgate.
+This table contains the encryption keys of the ships allowed to connect to the shipgate. The main_menu field in here controls whether that key is allowed in the main list of ships (a blank menu code).
 
 {{{
 CREATE TABLE `ship_data` (
   `rc4key` tinyblob NOT NULL,
   `idx` int(11) NOT NULL auto_increment,
+  `main_menu` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`idx`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
