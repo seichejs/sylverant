@@ -79,6 +79,21 @@ CREATE TABLE `dreamcast_clients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
+= Table friendlist =
+This table is used for storing friend lists of clients.
+
+{{{
+CREATE TABLE `friendlist` (
+  `owner` int(11) NOT NULL,
+  `entry` int(11) NOT NULL,
+  `friend` int(11) NOT NULL,
+  PRIMARY KEY  (`owner`,`entry`),
+  KEY `friend` (`friend`),
+  CONSTRAINT `friendlist_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `friendlist_ibfk_2` FOREIGN KEY (`friend`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
 = Table gamecube_clients=
 This table is used to store the serial number and access keys for Gamecube clients on the server.
 
