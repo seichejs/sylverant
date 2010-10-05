@@ -2,10 +2,10 @@
 #labels Phase-Deploy,Phase-Design,Phase-Implementation
 
 = Introduction =
-The database for Sylverant (needed on login servers and shipgates) consists of several tables, some of which are used currently, some of which aren't. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. The Blue Burst only tables are mostly adapted directly from Tethealla. Please note, these are all subject to change, and some have already changed several times.
+The database for Sylverant (needed on login servers and shipgates) consists of several table. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. Please note, these are all subject to change, and some have already changed several times.
 
 = Table account_data =
-The account_data table contains information on registered users of the server. Much of this information was used at the point when Sylverant supported Blue Burst, but isn't used quite as much. The create table used is as follows:
+The account_data table contains information on registered users of the server. Much of this table is still intact from when Sylverant was just a port of Tethealla, and still needs some cleaning. The create table used is as follows:
 
 {{{
 CREATE TABLE `account_data` (
@@ -90,7 +90,7 @@ CREATE TABLE `friendlist` (
   KEY `friend` (`friend`),
   CONSTRAINT `friendlist_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `friendlist_ibfk_2` FOREIGN KEY (`friend`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
 = Table gamecube_clients=
@@ -104,23 +104,6 @@ CREATE TABLE `gamecube_clients` (
   PRIMARY KEY  (`guildcard`),
   CONSTRAINT `gamecube_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-}}}
-
-= Table guild_data =
-This is another Blue Burst only table, which was used for lists of guildcards.
-
-{{{
-CREATE TABLE `guild_data` (
-  `accountid` int(11) NOT NULL default '0',
-  `friendid` int(11) NOT NULL default '0',
-  `friendname` tinyblob NOT NULL,
-  `friendtext` blob NOT NULL,
-  `reserved` smallint(6) NOT NULL default '257',
-  `sectionid` smallint(6) NOT NULL default '0',
-  `class` smallint(6) NOT NULL default '0',
-  `comment` tinyblob NOT NULL,
-  `priority` smallint(6) NOT NULL default '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table guildcard_bans =
@@ -150,16 +133,6 @@ CREATE TABLE `guildcards` (
 ) ENGINE=InnoDB AUTO_INCREMENT=10000 DEFAULT CHARSET=latin1;
 }}}
 
-= Table hw_bans =
-This one is Blue Burst only, and was used for hardware bans.
-
-{{{
-CREATE TABLE `hw_bans` (
-  `guildcard` int(11) NOT NULL,
-  `hwinfo` tinyblob NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_bin;
-}}}
-
 = Table ip_bans =
 This table is used to set a ban on an IP address at the shipgate level.
 
@@ -170,17 +143,6 @@ CREATE TABLE `ip_bans` (
   PRIMARY KEY  (`ban_id`),
   CONSTRAINT `ip_bans_ibfk_1` FOREIGN KEY (`ban_id`) REFERENCES `bans` (`ban_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-}}}
-
-= Table key_data =
-This is once again, Blue Burst only. This one stored the configuration of controls for a given account.
-
-{{{
-CREATE TABLE `key_data` (
-  `guildcard` int(11) NOT NULL default '0',
-  `controls` blob NOT NULL,
-  PRIMARY KEY  (`guildcard`)
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table online_clients =
@@ -244,19 +206,6 @@ CREATE TABLE `pc_clients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
-= Table security_data =
-This one is Blue Burst only, and is very wrong, but here for completeness.
-
-{{{
-CREATE TABLE `security_data` (
-  `guildcard` int(11) NOT NULL default '0',
-  `thirtytwo` int(11) NOT NULL default '0',
-  `sixtyfour` tinyblob NOT NULL,
-  `slotnum` tinyint(4) NOT NULL default '-1',
-  `isgm` int(11) NOT NULL default '0'
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-}}}
-
 = Table ship_data =
 This table contains the encryption keys of the ships allowed to connect to the shipgate. The main_menu field in here controls whether that key is allowed in the main list of ships (a blank menu code).
 
@@ -267,17 +216,4 @@ CREATE TABLE `ship_data` (
   `main_menu` tinyint(3) unsigned NOT NULL default '0',
   PRIMARY KEY  (`idx`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
-}}}
-
-= Table team_data =
-This is another Blue Burst-only table. This one was used to store information about teams.
-
-{{{
-CREATE TABLE `team_data` (
-  `name` tinyblob NOT NULL,
-  `owner` int(11) NOT NULL default '0',
-  `flag` blob NOT NULL,
-  `teamid` int(11) NOT NULL auto_increment,
-  PRIMARY KEY  (`teamid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
