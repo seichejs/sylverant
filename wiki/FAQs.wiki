@@ -27,7 +27,7 @@ Here is the list of currently available commands for regular users on the Sylver
   * /frienddel `[`guildcard`]` -- Remove a user from your friend list.
 
 = What additional commands are available to GMs on Sylverant? =
-  * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server.
+  * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
   * /warp `[`area`]` -- Warp to the specified map. `[`area`]` is a required field, and must be between 0 and 17. This command does not work on PSOv1. This command only works in game lobbies.
   * /warpall `[`area`]` -- Warp everyone in a lobby to the specified map. Has the same semantics as the /warp command. This will not warp anyone on PSOv1, just like /warp.
   * /refresh `[`what`]` -- Refresh some server data. `[`what`]` is a required field and must either be the string "gms" or "quests" (currently). It should be obvious what each does.
