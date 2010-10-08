@@ -155,8 +155,10 @@ CREATE TABLE `online_clients` (
   `ship_id` int(10) unsigned NOT NULL,
   `block` int(10) unsigned NOT NULL,
   `lobby` varchar(32) default NULL,
+  `lobby_id` int(10) unsigned default NULL,
   PRIMARY KEY  (`guildcard`),
   KEY `ship_id` (`ship_id`),
+  KEY `lobby_id` (`lobby_id`),
   CONSTRAINT `online_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `online_clients_ibfk_2` FOREIGN KEY (`ship_id`) REFERENCES `online_ships` (`ship_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
