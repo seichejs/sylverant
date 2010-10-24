@@ -25,6 +25,8 @@ Here is the list of currently available commands for regular users on the Sylver
   * /normal -- Undo the /legit command, if the flag actually got set on the lobby. This command can only be used by the party leader.
   * /friendadd `[`guildcard`]` -- Add a user to your friend list.
   * /frienddel `[`guildcard`]` -- Remove a user from your friend list.
+  * /v1only -- Make a game only available to PSOv1 players. Use "/v1only off" to undo this. This command can only be used by the party leader.
+  * /dconly -- Make a game only available to players on the Dreamcast. Use "/dconly off" to undo this. This command can only be used by the party leader.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
