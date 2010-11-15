@@ -51,3 +51,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /log `[`guildcard`]` -- Start logging all packets sent to or from the specified guildcard. You must be a local or global root to use this command.
   * /endlog `[`guildcard`]` -- Stop logging packets on a client that has had packets logged by running the /log command. Like that command, you must be a local or global root to use this command.
   * /forgegc `[`guildcard`]` `[`name`]` -- Send a guildcard to yourself with the specified guildcard number and name. Added mostly to help in debugging.
+  * /invuln -- Make yourself "invulnerable" (you automatically recover 2000 HP every time you're hit).
