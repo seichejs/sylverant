@@ -51,4 +51,5 @@ Here is the list of currently available commands for regular users on the Sylver
   * /log `[`guildcard`]` -- Start logging all packets sent to or from the specified guildcard. You must be a local or global root to use this command.
   * /endlog `[`guildcard`]` -- Stop logging packets on a client that has had packets logged by running the /log command. Like that command, you must be a local or global root to use this command.
   * /forgegc `[`guildcard`]` `[`name`]` -- Send a guildcard to yourself with the specified guildcard number and name. Added mostly to help in debugging.
-  * /invuln -- Make yourself "invulnerable" (you automatically recover 2000 HP every time you're hit).
+  * /invuln -- Make yourself "invulnerable" (you automatically recover 2000 HP every time you're hit). Note that this currently does not help you if the enemy one-hit kills you as this *does not resurrect*. Use "/invuln off" to turn it off after enabling it. Invulnerability is disabled in /legit games.
+  * /inftp -- Make yourself have "infinite" TP (you automatically recover 255 TP every time you use a tech). Use "/inftp off" to turn this off after you've enabled it. Infinite TP is disabled in /legit games.
