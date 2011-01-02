@@ -23,7 +23,7 @@ Here is the list of currently available commands for regular users on the Sylver
   * /bug -- Send user information about reporting a bug.
   * /legit -- This command is only available in game lobbies, and triggers a legit check on the whole team. If the legit check passes (according to the rules on the server), the legit flag is set on the game, which makes it so that anyone coming in must pass the legit check as well. This command can only be used by the party leader.
   * /normal -- Undo the /legit command, if the flag actually got set on the lobby. This command can only be used by the party leader.
-  * /friendadd `[`guildcard`]` -- Add a user to your friend list.
+  * /friendadd `[`guildcard`]` `[`nickname`]` -- Add a user to your friend list. The nickname is a convenience so you know who someone is, even if they're playing with a new character.
   * /frienddel `[`guildcard`]` -- Remove a user from your friend list.
   * /v1only -- Make a game only available to PSOv1 players. Use "/v1only off" to undo this. This command can only be used by the party leader.
   * /dconly -- Make a game only available to players on the Dreamcast. Use "/dconly off" to undo this. This command can only be used by the party leader.
