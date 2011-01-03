@@ -14,7 +14,7 @@ The base configuration file for configuring the Ship Server is called ship_confi
 
 <ships>
     <shipgate ip="Shipgate IP" port="Shipgate Port"/>
-    <ship name="Ship Name" blocks="Number of blocks" key="Keyfile" gms="GM File" menu="Menu Code">
+    <ship name="Ship Name" blocks="Number of blocks" key="Keyfile" gms="GM File" menu="Menu Code" gmonly="Enable GM Only Mode">
         <net port="Base Ship Port" ip="Ship IP" />
         <drops weapon="30" armor="20" mag="0.0001" tool="50" meseta="40" />
         <event num="0" />
@@ -34,12 +34,14 @@ The various fields are explained below:
   * Keyfile: An encryption key provided by the owner of the Shipgate.
   * GM File: The XML file to configure the list of GMs for this ship (described below)
   * Menu Code: The submenu of the shipgate to put this ship in. Unless the ship has been specially set up in the Database (the main_menu column of the ship_data table has been set to non-zero), this must be a valid 2 alphabetic character code. Basically, this _should_ be the two-character country code of the location of the ship, but this isn't strictly enforced. This should be omitted if the ship is to appear in the main menu of the shipgate.
+  * Enable GM Only mode: Set this to either "true" or "false" (default is false if its omitted) to limit the ship to only being able to be accessed by Global GMs.
   * Base Ship Port: The port to start allocating ports for ship connections. The program will allocate (number of blocks + 1) `*` 2 ports currently, and this is subject to change.
   * Ship IP: The publicly accessible IP address for the ship.
-  * Drops/Event/Exp: These currently aren't used, they were there for Blue Burst support, and will probably be brought back eventually.
-  * Info: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal ASCII (technically Shift-JIS, but who's counting) text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement.
+  * Drops/Exp: These currently aren't used, they were there for Blue Burst support, and will probably be brought back eventually.
+  * Event: Set the event that's shown in games and in the lobby. The game one is based on the lobby one, at the moment, but I'll eventually get around to making them separate. Lobby events aren't supported on PSODC/PSOPC.
+  * Info: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal UTF-8 text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement. These only work on PSODC/PSOPC since the Information option doesn't exist on PSOGC.
   * Quest File: The list of quests that are available on the server (described below).
-  * Message of the Day File: A text file that is used to send a message to clients when they connect. These messages currently will only show up for Dreamcast and PC clients, due to some issues with PSOGC. Keep the messages fairly short, as there's no way to scroll them on PSODC/PSOPC (they appear in the same large message box as the info desk entries).
+  * Message of the Day File: A text file that is used to send a message to clients when they connect. These messages currently will show up for Dreamcast and PC clients when they join the lobby, whereas they'll show up for Gamecube clients before they can select the block to join. Keep the messages fairly short, as there's no way to scroll them on PSODC/PSOPC (they appear in the same large message box as the info desk entries).
 
 == GM Configuration ==
 
