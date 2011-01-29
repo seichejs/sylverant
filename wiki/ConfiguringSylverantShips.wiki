@@ -50,6 +50,8 @@ The GM configuration file is a simple XML list of serial number/access key/guild
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE gms PUBLIC "-//Sylverant//DTD Ship GM List 1.0//EN" "http://sylverant.net/dtd/gms1/gms.dtd">
+
 <gms>
     <gm serial="Serial Number" accesskey="Access Key" guildcard="Guild Card" />
 </gms>
