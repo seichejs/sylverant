@@ -24,6 +24,7 @@ The base configuration file for configuring the Ship Server is called ship_confi
         <quests file="Quest File" />
         <limits file="Item List" />
         <motd file="Message of the Day File" />
+        <bans file="Ban List File" />
     </ship>
 </ships>
 }}}
@@ -45,6 +46,7 @@ The various fields are explained below:
   * Quest File: The list of quests that are available on the server (described below).
   * Item List: The list of items that are to be used for /legit. See the legits.xml in the ship_server for a full example of how to set it up.
   * Message of the Day File: A text file that is used to send a message to clients when they connect. These messages currently will show up for Dreamcast and PC clients when they join the lobby, whereas they'll show up for Gamecube clients before they can select the block to join. Keep the messages fairly short, as there's no way to scroll them on PSODC/PSOPC (they appear in the same large message box as the info desk entries).
+  * Ban List File: The filename to use to store local (ship-level) bans. If this file is not specified, bans will not persist when the server is restarted. You must make sure that the server can write to the specified file, otherwise the file won't be saved. The server will completely manage this file, so you don't have to worry about creating the file ahead of time or doing anything to it in general (hence why I haven't documented the format of the file, not that its hard to figure out).
 
 == GM Configuration ==
 
