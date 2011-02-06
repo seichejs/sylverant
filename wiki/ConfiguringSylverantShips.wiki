@@ -12,15 +12,17 @@ The base configuration file for configuring the Ship Server is called ship_confi
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE ships PUBLIC "-//Sylverant//DTD Ship Configuration 1.1//EN"
+  "http://sylverant.net/dtd/ship_config1.1/ship_config.dtd">
+
 <ships>
     <shipgate ip="Shipgate IP" port="Shipgate Port"/>
     <ship name="Ship Name" blocks="Number of blocks" key="Keyfile" gms="GM File" menu="Menu Code" gmonly="Enable GM Only Mode">
         <net port="Base Ship Port" ip="Ship IP" />
-        <drops weapon="30" armor="20" mag="0.0001" tool="50" meseta="40" />
-        <event num="0" />
-        <exp rate="100" />
+        <event lobby="Lobby Event Code" game="Game Event Code" />
         <info file="Filename" desc="Description" />
         <quests file="Quest File" />
+        <limits file="Item List" />
         <motd file="Message of the Day File" />
     </ship>
 </ships>
@@ -37,10 +39,11 @@ The various fields are explained below:
   * Enable GM Only mode: Set this to either "true" or "false" (default is false if its omitted) to limit the ship to only being able to be accessed by Global GMs.
   * Base Ship Port: The port to start allocating ports for ship connections. The program will allocate (number of blocks + 1) `*` 2 ports currently, and this is subject to change.
   * Ship IP: The publicly accessible IP address for the ship.
-  * Drops/Exp: These currently aren't used, they were there for Blue Burst support, and will probably be brought back eventually.
-  * Event: Set the event that's shown in games and in the lobby. The game one is based on the lobby one, at the moment, but I'll eventually get around to making them separate. Lobby events aren't supported on PSODC/PSOPC.
+  * Lobby Event Code: Set the event that's shown in the lobby. Lobby events aren't supported on PSODC/PSOPC. Valid values are 0-14.
+  * Game Event Code: Set the event that's shown in games. These, unlike lobby events, are supported on all versions of PSO. Valid values are 0-6.
   * Info: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal UTF-8 text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement. These only work on PSODC/PSOPC since the Information option doesn't exist on PSOGC.
   * Quest File: The list of quests that are available on the server (described below).
+  * Item List: The list of items that are to be used for /legit. See the legits.xml in the ship_server for a full example of how to set it up.
   * Message of the Day File: A text file that is used to send a message to clients when they connect. These messages currently will show up for Dreamcast and PC clients when they join the lobby, whereas they'll show up for Gamecube clients before they can select the block to join. Keep the messages fairly short, as there's no way to scroll them on PSODC/PSOPC (they appear in the same large message box as the info desk entries).
 
 == GM Configuration ==
@@ -50,7 +53,8 @@ The GM configuration file is a simple XML list of serial number/access key/guild
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE gms PUBLIC "-//Sylverant//DTD Ship GM List 1.0//EN" "http://sylverant.net/dtd/gms1/gms.dtd">
+<!DOCTYPE gms PUBLIC "-//Sylverant//DTD Ship GM List 1.0//EN" 
+  "http://sylverant.net/dtd/gms1/gms.dtd">
 
 <gms>
     <gm serial="Serial Number" accesskey="Access Key" guildcard="Guild Card" />
@@ -65,6 +69,9 @@ The Quest configuration file is an XML list of categories/quests that are availa
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
+
+<!DOCTYPE quests PUBLIC "-//Sylverant//DTD Quest List 1.0//EN" 
+  "http://sylverant.net/dtd/quests1/quests.dtd">
 
 <quests>
     <category name="VR">
