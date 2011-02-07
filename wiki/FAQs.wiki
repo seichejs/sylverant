@@ -68,3 +68,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /unstfu `[`guildcard`]` -- UnSTFUs a client, undoing that which the /stfu command did. This will only work on clients in the same block as the GM executing the command.
   * /gameevent `[`event code`]` -- This command sets the event in games created on the ship from that point forward. These, unlike lobby events, are supported on all versions of PSO. Valid event codes are from 0-6.
   * /ban:d `[`guildcard`]` `[`reason`]` -- Ban the specified user from the ship for one day. Also available are /ban:w (ban for one week), /ban:m (ban for 1 month), and /ban:p (Permanently ban). This will implicitly /kill the player as well if they're currently connected. This command, unlike the /gban commands is available to local GMs, as well as global GMs.
+  * /unban `[`guildcard`]` -- Lift the local ban on the specified guildcard.
