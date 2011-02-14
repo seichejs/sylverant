@@ -1,9 +1,9 @@
-#summary HOW-TO compile sylverant project in a Cygwin enviroment
+#summary HOW-TO compile sylverant project in a Cygwin environment
 #labels Phase-Deploy
 
 = Introduction =
 
-The objective of this guide is to help any user to get a full running Sylverant PSO server running in a Windows enviroment using Cygwin.
+The objective of this guide is to help any user to get a full running Sylverant PSO server running in a Windows environment using Cygwin.
 
 To have success on it, you need a minimum Unix level.
 I.e: know how to get a SVN copy, and how to use make tools and a little about MySQL.
@@ -11,13 +11,14 @@ I.e: know how to get a SVN copy, and how to use make tools and a little about My
 
 = Steps =
 
-You will need *Cygwin 1.7* or a newer version. Latest Cygwin DLL release version is 1.7.5-1.
+You will need *Cygwin 1.7* or a newer version. Latest Cygwin DLL release version is 1.7.7-1. Get the latest Cygwin here: http://cygwin.com/install.html
 
 == Compile phase ==
 
-1. Install Cygwin and add the following packages (with their dependences):
+1. Install Cygwin and add the following packages (with their dependencies):
 
 *autotools automake libtool openssl openssl-devel readline gettext-devel gcc-core gcc-g++ make libiconv*
+
 
 2.1. MYSQL Server side:
 
@@ -68,9 +69,9 @@ make install
 7. Compile ship_server.
 {{{
 cd sylverant/trunk/ship_server
-touch config.rpath (seems automake 1.10 bug)
+touch config.rpath (seems to correct automake 1.10 bug)
 autoreconf --install
-./configure --with-gnu-ld
+./configure
 make all
 make install
 }}}
@@ -89,7 +90,7 @@ make install
 9. Create config structure:
   * Create *"sylverant"* folder inside /usr/local/share/
   * Create *"config"* folder inside /usr/local/share/sylverant
-  * Put the 4 XML files inside config folder (ship_config.xml, quests.xml, gms.xml, sylverant_config.xml).
+  * Put the 4 XML files inside config folder (ship_config.xml, quests.xml, gms.xml, sylverant_config.xml (copy over legits.xml from ship_server) ).
   * Create *"keys"* folder.
   * Create *"info"* folder.
 
