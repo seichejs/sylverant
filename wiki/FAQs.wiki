@@ -35,6 +35,15 @@ Here is the list of currently available commands for regular users on the Sylver
   * /unignore `[`slot`]` -- Removes an entry from your ignore list. When using the /ignore command, it reports the entry number that it put the user in, that entry number is the argument here. Valid values are from 0-10.
   * /quit -- Lazy man's command to log off the server. In case its easier at a given point in time to type that than to go through the menus to quit.
   * /cc `[`trigger character`]` -- Enables "Color Chat" mode. Essentially, it turns any instance of the trigger character into an escape for doing colors. Follow the trigger character with a C and the value of the color you want to use, and the message will be in that color (0 = black, 1 = dark blue, 2 = green, 3 = cyan, 4 = red, 5 = magenta, 6 = yellow, 7 = white, G = gold (only visible on v2 and later)). You can later disable this with `/cc off`. For instance, if you were to use `/cc $` and then type `$C2Hello $C3World`  you'd end up saying Hello World where the Hello is in green, and the World is in cyan. I recommend using a character you don't normally type much for the trigger char, since otherwise you might screw things up. You can, in theory, use any ASCII character though.
+  * /qlang `[`language code`]` -- Set the language to browse quests in (when the server is set up for multi-lingual quests). This also sets your fallback language for if a quest is selected that isn't available in the language your language code says you're in (it first tries your character's language code, then your fallback value (set with this) then the language the leader selected the quest in). Valid language codes are as follows:
+    * jp -- Japanese
+    * en -- English
+    * de -- German
+    * fr -- French
+    * es -- Spanish
+    * cs -- Chinese (Simplified) -- PSOPC Only
+    * ct -- Chinese (Traditional) -- PSOPC Only
+    * kr -- Korean -- PSOPC Only.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
