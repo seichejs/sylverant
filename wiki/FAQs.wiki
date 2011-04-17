@@ -44,6 +44,7 @@ Here is the list of currently available commands for regular users on the Sylver
     * cs -- Chinese (Simplified) -- PSOPC Only
     * ct -- Chinese (Traditional) -- PSOPC Only
     * kr -- Korean -- PSOPC Only.
+  * /friends `[`page`]` -- Show your friendlist, including each person's online/offline status. Each page of entries is 5 long, and is sorted by the friend's guildcard number. `[`page`]` is 0-based, so `/friends 0` will show the first 5 people in your list.
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
@@ -79,3 +80,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /gameevent `[`event code`]` -- This command sets the event in games created on the ship from that point forward. These, unlike lobby events, are supported on all versions of PSO. Valid event codes are from 0-6.
   * /ban:d `[`guildcard`]` `[`reason`]` -- Ban the specified user from the ship for one day. Also available are /ban:w (ban for one week), /ban:m (ban for 1 month), and /ban:p (Permanently ban). This will implicitly /kill the player as well if they're currently connected. This command, unlike the /gban commands is available to local GMs, as well as global GMs.
   * /unban `[`guildcard`]` -- Lift the local ban on the specified guildcard.
+  * /gbc `[`message`]` -- Send a global (all ships) broadcast message. Only available to Global GMs, obviously.
