@@ -223,3 +223,16 @@ CREATE TABLE `ship_data` (
   PRIMARY KEY  (`idx`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
+
+= Table user_options =
+This table contains options that have been set by users. Each option has its own format, so a tinyblob is used to make sure we can store anything (up to 255 bytes, anyway).
+
+{{{
+CREATE TABLE `user_options` (
+  `guildcard` int(11) NOT NULL,
+  `opt` int(10) unsigned NOT NULL,
+  `value` tinyblob,
+  PRIMARY KEY  (`guildcard`,`opt`),
+  CONSTRAINT `user_options_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
