@@ -180,6 +180,9 @@ CREATE TABLE `online_ships` (
   `games` int(11) NOT NULL default '0',
   `menu_code` int(11) NOT NULL default '0',
   `flags` int(10) unsigned NOT NULL default '0',
+  `ship_number` int(10) unsigned NOT NULL default '0',
+  `ship_ip6_high` bigint(20) unsigned default NULL,
+  `ship_ip6_low` bigint(20) unsigned default NULL,
   PRIMARY KEY  (`ship_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
