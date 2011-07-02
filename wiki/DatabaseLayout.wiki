@@ -183,6 +183,7 @@ CREATE TABLE `online_ships` (
   `ship_number` int(10) unsigned NOT NULL default '0',
   `ship_ip6_high` bigint(20) unsigned default NULL,
   `ship_ip6_low` bigint(20) unsigned default NULL,
+  `protocol_ver` int(10) unsigned NOT NULL,
   PRIMARY KEY  (`ship_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
