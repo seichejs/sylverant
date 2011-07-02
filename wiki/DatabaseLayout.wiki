@@ -2,30 +2,22 @@
 #labels Phase-Deploy,Phase-Design,Phase-Implementation
 
 = Introduction =
-The database for Sylverant (needed on login servers and shipgates) consists of several table. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. Please note, these are all subject to change, and some have already changed several times.
+The database for Sylverant (needed on login servers and shipgates) consists of several tables. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. Please note, these are all subject to change, and some have already changed several times.
 
 = Table account_data =
-The account_data table contains information on registered users of the server. Much of this table is still intact from when Sylverant was just a port of Tethealla, and still needs some cleaning. The create table used is as follows:
+The account_data table contains information on registered users of the server. The create table used is as follows:
 
 {{{
 CREATE TABLE `account_data` (
   `account_id` int(11) NOT NULL auto_increment,
-  `username` varchar(18) collate latin1_general_ci NOT NULL default '',
-  `password` varchar(33) collate latin1_general_ci NOT NULL default '',
-  `email` varchar(255) collate latin1_general_ci NOT NULL default '',
-  `regtime` int(11) unsigned NOT NULL default '0',
-  `lastip` varchar(16) collate latin1_general_ci NOT NULL default '',
-  `lasthwinfo` tinyblob,
-  `isgm` tinyint(2) NOT NULL default '0',
+  `username` varchar(18) collate latin1_general_ci NOT NULL,
+  `password` varchar(33) collate latin1_general_ci NOT NULL,
+  `email` varchar(255) collate latin1_general_ci NOT NULL,
+  `regtime` int(10) unsigned NOT NULL,
   `isbanned` tinyint(2) NOT NULL default '0',
-  `islogged` tinyint(2) NOT NULL default '0',
-  `isactive` tinyint(2) NOT NULL default '0',
   `teamid` int(11) NOT NULL default '-1',
   `privlevel` int(10) unsigned NOT NULL default '0',
-  `lastchar` tinyblob,
   `dressflag` tinyint(1) NOT NULL default '0',
-  `lastship` varchar(12) collate latin1_general_ci default NULL,
-  `lastblock` tinyint(2) default NULL,
   PRIMARY KEY  (`account_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
@@ -58,10 +50,11 @@ The character_data table is used to store character data that is saved with the 
 
 {{{
 CREATE TABLE `character_data` (
-  `guildcard` int(11) NOT NULL default '0',
-  `slot` tinyint(4) NOT NULL default '0',
+  `guildcard` int(11) NOT NULL,
+  `slot` tinyint(4) NOT NULL,
   `data` blob NOT NULL,
-  `header` tinyblob
+  KEY `guildcard` (`guildcard`),
+  CONSTRAINT `character_data_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
