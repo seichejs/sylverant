@@ -45,8 +45,146 @@ This trigger sets the start time of the ban to the current time when the ban is 
 CREATE TRIGGER `ban_start` BEFORE INSERT ON `bans` FOR EACH ROW set new.startdate = UNIX_TIMESTAMP();
 }}}
 
+= Table blueburst_blacklist =
+This table is used to store all the people that have been added to clients' blocked senders list on Blue Burst.
+
+{{{
+CREATE TABLE `blueburst_blacklist` (
+  `guildcard` int(11) NOT NULL,
+  `blocked_gc` int(11) NOT NULL,
+  `name` tinyblob NOT NULL,
+  `team_name` tinyblob NOT NULL,
+  `text` tinyblob NOT NULL,
+  `language` tinyint(4) NOT NULL,
+  `section_id` tinyint(4) NOT NULL,
+  `class` tinyint(4) NOT NULL,
+  PRIMARY KEY  (`guildcard`,`blocked_gc`),
+  KEY `guildcard` (`guildcard`),
+  KEY `friend_gc` (`blocked_gc`),
+  CONSTRAINT `blueburst_blacklist_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blueburst_blacklist_ibfk_2` FOREIGN KEY (`blocked_gc`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Table blueburst_clients =
+This table is used for storing clients that are authorized to play on Blue Burst. It stores the username and password combinations that they must use to log in.
+
+{{{
+CREATE TABLE `blueburst_clients` (
+  `account_id` int(11) NOT NULL,
+  `guildcard` int(11) NOT NULL,
+  `username` varchar(33) character set utf8 NOT NULL,
+  `password` binary(32) NOT NULL,
+  PRIMARY KEY  (`account_id`),
+  KEY `guildcard` (`guildcard`),
+  CONSTRAINT `blueburst_clients_ibfk_1` FOREIGN KEY (`account_id`) REFERENCES `account_data` (`account_id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blueburst_clients_ibfk_2` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Table blueburst_guildcards =
+This table is used to store the guildcards that Blue Burst users have collected from others.
+
+{{{
+CREATE TABLE `blueburst_guildcards` (
+  `guildcard` int(11) NOT NULL,
+  `friend_gc` int(11) NOT NULL,
+  `name` tinyblob NOT NULL,
+  `team_name` tinyblob NOT NULL,
+  `text` tinyblob NOT NULL,
+  `language` tinyint(4) NOT NULL,
+  `section_id` tinyint(4) NOT NULL,
+  `class` tinyint(4) NOT NULL,
+  `comment` tinyblob,
+  `priority` smallint(6) NOT NULL default '-1',
+  PRIMARY KEY  (`guildcard`,`friend_gc`),
+  KEY `guildcard` (`guildcard`),
+  KEY `friend_gc` (`friend_gc`),
+  CONSTRAINT `blueburst_guildcards_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `blueburst_guildcards_ibfk_2` FOREIGN KEY (`friend_gc`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+= Trigger blueburst_guildcard_insert_prio =
+This trigger is used to set the priority field properly on an insert into the blueburst_guildcards table.
+
+{{{
+DELIMITER $
+CREATE TRIGGER `blueburst_guildcard_insert_prio`
+  BEFORE INSERT ON `blueburst_guildcards` FOR EACH ROW
+  BEGIN
+    DECLARE maxprio INT;
+    SET maxprio = (SELECT MAX(`priority`) FROM `blueburst_guildcards` 
+                     WHERE guildcard = NEW.guildcard);
+    IF maxprio IS NOT NULL THEN
+      SET NEW.priority = maxprio + 1;
+    ELSE
+      SET NEW.priority = 0;
+    END IF;
+  END$
+DELIMITER ;
+}}}
+
+= Stored Procedure blueburst_guildcard_delete =
+This stored procedure is used to actually delete a guildcard from a Blue Burst user's list. It automatically fixes priority values so that they stay in order. This should be used instead of a DELETE for actually removing the guildcards from the table.
+
+{{{
+DELIMITER $
+CREATE PROCEDURE `blueburst_guildcard_delete` (IN gc INT, IN frgc INT)
+  BEGIN
+    DECLARE prio INT;
+    SET prio = (SELECT `priority` FROM `blueburst_guildcards`
+                  WHERE `guildcard` = gc AND `friend_gc` = frgc);
+    IF prio IS NOT NULL THEN
+      DELETE FROM `blueburst_guildcards`
+        WHERE `guildcard` = gc AND `friend_gc` = frgc;
+      UPDATE `blueburst_guildcards` SET `priority` = `priority` - 1
+        WHERE `guildcard` = gc AND `priority` > prio;
+    END IF;
+  END$
+DELIMITER ;
+}}}
+
+= Stored Procedure blueburst_guildcard_sort =
+This stored procedure swaps two guildcards in a Blue Burst user's list (for when they use the sort guildcards menu option).
+
+{{{
+DELIMITER $
+CREATE PROCEDURE `blueburst_guildcard_sort`
+ (IN gc INT, IN frgc1 INT, IN frgc2 INT)
+  BEGIN
+    DECLARE prio1 INT;
+    DECLARE prio2 INT;
+    SET prio1 = (SELECT `priority` FROM `blueburst_guildcards`
+                   WHERE `guildcard` = gc AND `friend_gc` = frgc1);
+    SET prio2 = (SELECT `priority` FROM `blueburst_guildcards`
+                   WHERE `guildcard` = gc AND `friend_gc` = frgc2);
+    IF prio1 IS NOT NULL AND prio2 IS NOT NULL THEN
+      UPDATE `blueburst_guildcards` SET `priority` = prio2
+        WHERE `guildcard` = gc AND `friend_gc` = frgc1;
+      UPDATE `blueburst_guildcards` SET `priority` = prio1
+        WHERE `guildcard` = gc AND `friend_gc` = frgc2;
+    END IF;
+  END$
+DELIMITER ;
+}}}
+
+= Table blueburst_options =
+This table is used to store the various game options set by Blue Burst users. The options column here is of type (from libsylverant) sylverant_bb_db_opts_t (see sylverant/characters.h).
+
+{{{
+CREATE TABLE `blueburst_options` (
+  `guildcard` int(11) NOT NULL,
+  `options` blob NOT NULL,
+  PRIMARY KEY  (`guildcard`),
+  CONSTRAINT `blueburst_options_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
+
+
 = Table character_data =
-The character_data table is used to store character data that is saved with the /save command on the server. It was also used to store Blue Burst character data as well.
+The character_data table is used to store character data that is saved with the /save command on the server (type v1_player_t). It is also used to store Blue Burst character data as well (type sylverant_bb_db_char_t). Blue Burst character data is stored with slot values of 0 - 3.
 
 {{{
 CREATE TABLE `character_data` (
@@ -59,7 +197,7 @@ CREATE TABLE `character_data` (
 }}}
 
 = Table dreamcast_clients =
-This table is obviously used to store Dreamcast clients for the server. PC clients now have their own table.
+This table is obviously used to store Dreamcast clients for the server.
 
 {{{
 CREATE TABLE `dreamcast_clients` (
@@ -145,17 +283,17 @@ This table is used to store a list of currently online clients.
 {{{
 CREATE TABLE `online_clients` (
   `guildcard` int(11) NOT NULL,
-  `name` varchar(32) NOT NULL,
+  `name` varchar(32) character set utf8 NOT NULL,
   `ship_id` int(10) unsigned NOT NULL,
   `block` int(10) unsigned NOT NULL,
-  `lobby` varchar(32) default NULL,
+  `lobby` varchar(32) collate latin1_general_ci NOT NULL,
   `lobby_id` int(10) unsigned default NULL,
   PRIMARY KEY  (`guildcard`),
   KEY `ship_id` (`ship_id`),
   KEY `lobby_id` (`lobby_id`),
   CONSTRAINT `online_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `online_clients_ibfk_2` FOREIGN KEY (`ship_id`) REFERENCES `online_ships` (`ship_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table online_ships =
