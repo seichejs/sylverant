@@ -46,6 +46,7 @@ Here is the list of currently available commands for regular users on the Sylver
     * kr -- Korean -- PSOPC Only.
   * /friends `[`page`]` -- Show your friendlist, including each person's online/offline status. Each page of entries is 5 long, and is sorted by the friend's guildcard number. `[`page`]` is 0-based, so `/friends 0` will show the first 5 people in your list.
   * /ver -- Show the SVN revision of the ship you're currently on.
+  * /search `[`guildcard`]` -- Perform a search for the specified guildcard number, much like searching for someone with their card (it acts pretty much the same internally).
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
