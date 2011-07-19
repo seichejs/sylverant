@@ -8,7 +8,9 @@ The objective of this guide is to help any user to get a full running Sylverant 
 To have success on it, you need a minimum Unix level.
 I.e: know how to get a SVN copy, and how to use make tools and a little about MySQL.
 
-*Last update:* 2 July 2011
+Please note, that as r500, Sylverant will compile with IPv6 support by default. Cygwin already supports IPv6 on Windows 7, and partially on XP. In this guide, we'll indicate you the necessary flags to compile only with IPv4.
+
+*Last update:* 19 July 2011
 
 = Steps =
 
@@ -69,7 +71,7 @@ make install
 {{{
 cd sylverant/trunk/login_server
 autoreconf --install
-CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
+CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure [--disable-ipv6]
 make all
 make install
 }}}
@@ -79,7 +81,7 @@ Note: If you compiled mini18n, sylverant will create a l10n folder inside share/
 {{{
 cd sylverant/trunk/patch_server (Needed for PSO PC Players).
 autoreconf --install
-CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
+CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure [--disable-ipv6]
 make all
 make install
 }}}
@@ -89,7 +91,7 @@ make install
 cd sylverant/trunk/ship_server
 touch config.rpath (seems to correct automake 1.10 bug)
 autoreconf --install
-CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
+CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure [--disable-ipv6]
 make all
 make install
 }}}
@@ -97,6 +99,7 @@ make install
 8. Compile shipgate.
 {{{
 cd sylverant/trunk/shipgate
+touch config.rpath 
 autoreconf --install
 CFLAGS="-I/usr/local/include" LDFLAGS="-L/usr/local/lib" ./configure
 make all
@@ -109,13 +112,15 @@ make install
 9. Create config structure:
   * Create *"sylverant"* folder inside /usr/local/share/
   * Create *"config"* folder inside /usr/local/share/sylverant
-  * Put the 5 XML files inside config folder (ship_config.xml, quests.xml, gms.xml, sylverant_config.xml (copy over legits.xml from ship_server) ).
+  * Put the next XML files inside config folder (ship_config.xml, quests.xml, gms.xml, patch_config.xml, sylverant_config.xml (copy over legits.xml from ship_server) ).
   * Create *"keys"* folder.
   * Create *"info"* folder.
+  * Create *"logs"* folder.
 
-  * Optional: Create text files inside info folder (about.txt, bugs.txt and bugreport.txt)
+  * Optional: Create text files inside info folder (about.txt, bugs.txt, bugreport.txt, motd.txt)
   * Optional: Create *"patches"* folder.
-  * Optional: Create "patch_welcome" file (no extension) inside config folder.
+
+  * For BB: You will need a "blueburst" folder with extra data.
 
 10. Edit XML data:
 
@@ -163,14 +168,18 @@ Time to start our server!
 
 By default, the programs execute in daemon mode. If you want to see log messages, use *--nodaemon* argument.
 
+As of r503, you can use *--no-ipv6* argument to ship_server.
+
 16. Start the *login_server*:
 
 {{{
-$ login_server.exe
+$ login_server.exe --nodaemon
+[2010:04:18: 16:46:42.515]: Reading quests...
 [2010:04:18: 16:46:42.515]: Connecting to the database...
-[2010:04:18: 16:46:42.515]: Opening Dreamcast port (9200) for connections.
-[2010:04:18: 16:46:42.515]: Opening PC port (9300) for connections.
-[2010:04:18: 16:46:42.515]: Opening GC port (9100) for connections.
+[2010:04:18: 16:46:42.515]: Opening Dreamcast ports for connections.
+[2010:04:18: 16:46:42.515]: Opening PSO for PC ports for connections.
+[2010:04:18: 16:46:42.515]: Opening PSO for Gamecube ports for connections.
+...
 }}}
 
 *Developer Tip:* If you want to know what commands mean, take a look at login_packets.h
@@ -179,18 +188,17 @@ $ login_server.exe
 17. Start the *shipgate*:
 
 {{{
-$ shipgate.exe
+$ shipgate.exe --nodaemon
 [2010:04:18: 16:46:42.515]: Connecting to the database...
-[2010:04:18: 16:46:42.515]: Setting session wait_timeout...
 [2010:04:18: 16:46:42.515]: Clearing online ships...
+[2010:04:18: 16:46:42.515]: Clearing online_clients...
+...
 }}}
 
 18. Start the *ship_server*:
 
 {{{
-$ ship_server.exe
-[2010:04:18: 16:04:58.562]: Loading Sylverant Ship configuration file...
-[2010:04:18: 16:04:58.567]: Ok
+$ ship_server.exe --nodaemon
 [2010:04:18: 16:04:58.567]: Configured parameters:
 [2010:04:18: 16:04:58.567]: Shipgate IP: 192.168.0.2
 [2010:04:18: 16:04:58.568]: Shipgate Port: 3455
@@ -199,17 +207,14 @@ $ ship_server.exe
 [2010:04:18: 16:04:58.568]: Ship IP: use.public.ip
 [2010:04:18: 16:04:58.568]: Base Port: 12001
 [2010:04:18: 16:04:58.568]: Blocks: 2
-[2010:04:18: 16:04:58.568]: Event: 0
-[2010:04:18: 16:04:58.568]: Experience Rate: 100.000000
-[2010:04:18: 16:04:58.568]: Weapon drop rate: 30.000000
-[2010:04:18: 16:04:58.568]: Armor drop rate: 20.000000
-[2010:04:18: 16:04:58.569]: Mag drop rate: 0.000100
-[2010:04:18: 16:04:58.569]: Tool drop rate: 50.000000
-[2010:04:18: 16:04:58.569]: Meseta drop rate: 40.000000
+[2010:04:18: 16:04:58.568]: Lobby Event: 0
+[2010:04:18: 16:04:58.568]: Game Event: 0
+[2010:04:18: 16:04:58.568]: Flags: 0x00000000
 
 [2010:04:18: 16:04:58.727]: Starting server for ship A random name...
 [2010:04:18: 16:04:58.729]: Loading shipgate key...
 [2010:04:18: 16:04:58.731]: Connecting to shipgate...
+...
 }}}
 
   * If it says: Connection refused
@@ -221,7 +226,7 @@ $ ship_server.exe
 19. Optional: Start the *patch_server*:
 
 {{{
-$ patch_server.exe
+$ patch_server.exe --nodaemon
 [2010:04:19: 21:09:55.703]: Loading Sylverant configuration file... 
 [2010:04:19: 21:09:55.704]: Ok
 [2010:04:19: 21:09:55.704]: Configured parameters:
@@ -232,6 +237,7 @@ $ patch_server.exe
 [2010:04:19: 21:09:55.724]: Ok
 [2010:04:19: 21:09:55.724]: Installing SIGUSR1 handler... 
 [2010:04:19: 21:09:55.724]: Ok
+...
 }}}
 
   * If it says: bind: Cannot assign requested address, it means that it is reading the external IP from sylverant_config.xml. It has to be a private IP.
