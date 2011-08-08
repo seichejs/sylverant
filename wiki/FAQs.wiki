@@ -84,3 +84,4 @@ Here is the list of currently available commands for regular users on the Sylver
   * /unban `[`guildcard`]` -- Lift the local ban on the specified guildcard.
   * /gbc `[`message`]` -- Send a global (all ships) broadcast message. Only available to Global GMs, obviously.
   * /restart `[`minutes`]` -- This command is only available to global and local root users, and schedules the ship for a graceful restart in the specified number of minutes. It broadcasts a message to all users that the ship is going down for restart, and makes the ship not accept any further incoming connections until the restart is completed.
+  * /gm -- This command presents an inventory of various actions a GM can do. It doesn't contain everything that a GM can do, and it will only show actions that you're allowed to do by your privilege level.
