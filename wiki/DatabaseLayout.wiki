@@ -350,11 +350,11 @@ This table contains the encryption keys of the ships allowed to connect to the s
 
 {{{
 CREATE TABLE `ship_data` (
-  `rc4key` tinyblob NOT NULL,
   `idx` int(11) NOT NULL auto_increment,
   `main_menu` tinyint(3) unsigned NOT NULL default '0',
   `ship_number` int(10) unsigned NOT NULL,
   `memo` varchar(256) collate latin1_general_ci default NULL,
+  `sha1_fingerprint` binary(20) NOT NULL,
   PRIMARY KEY  (`idx`)
 ) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
