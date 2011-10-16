@@ -1,40 +1,47 @@
-#summary Configuring Sylverant Login/Patch Server and Shipgate.
+#summary Configuring Sylverant Login Server and Shipgate.
 #labels Phase-Deploy
 
 = Introduction =
 
-Login/Patch Servers and Shipgate are all configured with one file, sylverant_config.xml. This file is generally stored in the config subdirectory of the /usr/local/share/sylverant directory (generally, this can be configured at libsylverant compile time). The structure of this file is shown below.
+Login Server and Shipgate are all configured with one file, `sylverant_config.xml`. This file is generally stored in the `config` subdirectory of the `/usr/local/share/sylverant` directory (this can be configured at libsylverant compile time). The structure of this file is shown below.
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
+<!DOCTYPE sylverant_config PUBLIC "-//Sylverant//DTD Sylverant Configuration 1.4//EN"
+  "http://sylverant.net/dtd/sylverant_config1.4/sylverant_config.dtd">
+
 <sylverant_config>
-    <database type="mysql" host="DB Host" user="DB User" pass="DB Password"
-     db="Database Name" port="DB Port" />
-    <server addr="Server IP" port="12000" netmask="Server Netmask" />
-    <welcome message="Welcome to Sylverant." />
-    <colors globalGM="0x1D94F7" localGM="0xB0CEDE" user="0xFFFFFF" />
-    <raremonsters hildebear="250" rappy="777" lilly="450" slime="250"
-     merissa="250" pazuzu="250" dorphon="250" kondrieu="20000" />
+    <database type="mysql" host="DB Host" user="DB User" pass="DB Password" db="Database Name" port="DB Port" />
+    <server addr="IPv4 Address" ip6="IPv6 Address" />
+    <shipgate port="Shipgate Port" cert="Shipgate Certificate" key="Shipgate Key" ca-cert="CA Certificate" />
     <quests dir="Offline Quests Directory" />
+    <info file="Info File Name" desc="Info File Description" />
+    <info file="Info File Name 2" desc="Info File Description 2" gc="true" ep3="false" bb="true" languages="en,jp" />
+    <motd file="MOTD File" gc="true" ep3="false" bb="false" />
+    <limits file="Limits File" />
 </sylverant_config>
 }}}
 
-The variables of the file are described below. Note that many of these have not been used since Sylverant has not supported Blue Burst.
+The variables of the file are described below.
 
   * DB Host: The hostname of the Database for the server. This must be a MySQL database at the current time. It is recommended to run this on the same machine as the Login Server and Shipgate, but this isn't strictly required.
   * DB User: The username for accessing the database.
   * DB Password: The password for the user specified before.
   * Database Name: The name of the database that stores the tables for the server.
   * DB Port: The port to access the MySQL server on.
-  * Server IP: The publicly accessible IP address of the server.
-  * Server Netmask: The netmask on the local subnet of the server.
-  * Offline Quests Directory: The directory that is the root of the offline quests tree. This allows the login server to serve downloadable quests to clients (see ConfiguringQuests for more information)
+  * IPv4 Address: The publicly accessible IPv4 address of the server.
+  * IPv6 Address: The publicly accessible IPv6 address of the server. If you do not have one of these, leave the attribute out all together.
+  * Shipgate Port: The port for ships to connect to.
+  * Shipgate Certificate: The TLS certificate that the Shipgate presents to ships for encryption purposes. This should be in PEM format.
+  * Shipgate Key: The private key used for encryption on the Shipgate. This should be in PEM format.
+  * CA Certificate: The TLS certificate of the Certificate Authority that generated the shipgate and ship certificates. This should be in PEM format.
+  * Offline Quests Directory: The directory that is the root of the offline quests tree. This allows the login server to serve downloadable quests to clients (see ConfiguringQuests for more information).
+  * Info File Name: An information file to present to users. These will only be visible on PSO Episode I & II, Episode III, and Blue Burst. You can have multiple of these. Also, these can be limited by versions and languages, as is shown in the second `<info>` tag. The valid list of language codes are as follows: jp, en, de, fr, es, cs, ct, kr (for Japanese, English, German, French, Spanish, Simplified Chinese, Traditional Chinese, and Korean respectively).
+  * Info File Description: The text to put in the menu so users know what they're looking at.
+  * MOTD File: A Message of the Day File. This will only be shown to PSO Episode I & II, Episode III, or Blue Burst clients. You can limit these by versions and languages, just like `<info>` files.
+  * Limits File: A legit checker configuration file. If you don't want people subjected to a login server legit check, leave this tag out. Any clients failing this check will be kicked from the server, and not allowed to connect to a ship. As some checks in the legit checker do not handle versions other than PSOv1, PSOv2, and PSOPC very well, it is recommended to leave this off for now.
 
-The rest of the variables aren't used currently, and will probably be removed at some point (at least until they're useful again).
+= TLS Certificates =
 
-= Patch Server Patches =
-
-The patch server requires two things of its own to configure it, a welcome message and patches. Patches aren't actually necessary, but the welcome message is. The welcome message should be called "patch_welcome" and be in the same directory as the configuration files. This file is encoded as UTF-16 plain text (little-endian, with or without a BOM, it *MUST* be little-endian).
-
-Patches are generally in the patches subdirectory of the Sylverant directory. The root of the directory will correspond to the root of the PSO directory. Each patch is just a file that is force-downloaded to clients when the client connects.
+Shipgate uses TLS to communicate with ship servers, through the GnuTLS library. The shipgate has its own certificate, as do each of the ships. The SHA1 fingerprint of the ship's certificate should be stored in the sha1_fingerprint column of the ship_data table of the database. It is outside of the scope of this document to explain how to set up TLS certificates and the like. Search out the GnuTLS documentation for more about that. The way the main Sylverant server is set up is that I operate my own CA for the ships and the shipgate. It is entirely possible to use certificates generated by a well-known CA, if you so choose (but all ships and the shipgate must have certificates from the *SAME* CA at the moment).
