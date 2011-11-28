@@ -191,9 +191,10 @@ CREATE TABLE `character_data` (
   `guildcard` int(11) NOT NULL,
   `slot` tinyint(4) NOT NULL,
   `data` blob NOT NULL,
+  `size` smallint(6) default NULL,
   KEY `guildcard` (`guildcard`),
   CONSTRAINT `character_data_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
 }}}
 
 = Table dreamcast_clients =
