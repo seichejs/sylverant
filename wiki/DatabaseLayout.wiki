@@ -181,7 +181,20 @@ CREATE TABLE `blueburst_options` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
+= Table character_backup =
+The character_backup table is used to store automatic backups of character data. This functionality was added in shipgate protocol v11.
 
+{{{
+CREATE TABLE `character_backup` (
+  `guildcard` int(11) NOT NULL,
+  `name` varchar(32) NOT NULL,
+  `data` blob NOT NULL,
+  `size` smallint(6) default NULL,
+  `time` timestamp NOT NULL default CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP,
+  PRIMARY KEY  (`guildcard`,`name`),
+  CONSTRAINT `character_backup_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+}}}
 
 = Table character_data =
 The character_data table is used to store character data that is saved with the /save command on the server (type v1_player_t). It is also used to store Blue Burst character data as well (type sylverant_bb_db_char_t). Blue Burst character data is stored with slot values of 0 - 3.
@@ -194,7 +207,7 @@ CREATE TABLE `character_data` (
   `size` smallint(6) default NULL,
   KEY `guildcard` (`guildcard`),
   CONSTRAINT `character_data_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table dreamcast_clients =
