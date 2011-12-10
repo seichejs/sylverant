@@ -48,6 +48,7 @@ Here is the list of currently available commands for regular users on the Sylver
   * /ver -- Show the SVN revision of the ship you're currently on.
   * /search `[`guildcard`]` -- Perform a search for the specified guildcard number, much like searching for someone with their card (it acts pretty much the same internally).
   * /showmaps -- Show the string of maps in use for the team you're in. Only valid in a game lobby.
+  * /restorebk -- Restore your character data from an automatic backup of it. This functionality was added in r572 to the ship server. Basically, every time you join a game, the server saves a snapshot of your character data. Think of it like an automatic /save functionality. The server will store one copy of each of your characters (where individual characters are determined by a unique <guildcard, name> pair).
 
 = What additional commands are available to GMs on Sylverant? =
   * /kill `[`guildcard`]` `[`reason`]` -- Kick the specified user from the server. `[`guildcard`]` is a required field and must be a numeric guild card number. `[`reason`]` is an optional field that will tell the user why they were kicked from the server. This *does not* ban the user from the server. Note: for Local GMs, this will only work if the GM and the target are on the same *block*. For Global GMs, this will work even if the target is on a different block or a different ship all together.
