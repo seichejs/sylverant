@@ -42,12 +42,12 @@ make install
 
 *Multi-language server support*
 
-If you want to have your server messages in other languages than English, you need to install the *mini18n* project:
+If you want to have your server messages in other languages than English, you need to install the *mini18n* project.
+*Note* You need CMake >= 2.8 to generate the Makefiles (i.e. Win32 version).
 {{{
 cd /usr/local
 svn co https://yabause.svn.sourceforge.net/svnroot/yabause/trunk/mini18n minii18n
-sh autogen.sh
-./configure
+cmake -G "MinGW Makefiles"
 make
 make install
 }}}
@@ -144,8 +144,8 @@ mysql -h 127.0.0.1 -uroot -psomepass (pso < psoscript.sql)
 12. For every PSO PC user, you have to add it to the database:
 
 {{{
-mysql> INSERT INTO guildcards VALUES (idcard,idaccount);
-mysql> INSERT INTO pc_clients VALUES (idcard,"serial","key");
+mysql> INSERT INTO guildcards VALUES (guildcard,account_id);
+mysql> INSERT INTO pc_clients VALUES (guildcard,"serial_number","access_key");
 }}}
 
 See [FAQs] for more information about how to add a PSOPC player.
@@ -191,6 +191,16 @@ Your CA is: sslCA/demoCA/cacert.pem
 
 Copy these files inside your config folder and edit sylverant_config.xml
 
+Get the SHA1 Fingerprint of our ship_server cert:
+{{{
+$ openssl.exe x509 -noout -sha1 -fingerprint -in sylverant-cert.pem
+}}}
+
+Create a new registry in MySQL 'ship_data' table:
+mysql> INSERT INTO ship_data (ship_number,memo,sha1_fingerprint) VALUES ('0','',UNHEX('BB34765179347A0823787BE03756AA75B0D9E0CC'));
+
+Where 'BB34...' is your SHA1 fingerprint without the ':' symbols.
+
 == Execute phase ==
 
 Time to start our server!
@@ -199,7 +209,7 @@ Time to start our server!
 
 By default, the programs execute in daemon mode. If you want to see log messages, use *--nodaemon* argument.
 
-16. Start the *login_server*:
+17. Start the *login_server*:
 
 {{{
 $ login_server.exe --nodaemon
@@ -211,7 +221,7 @@ $ login_server.exe --nodaemon
 ...
 }}}
 
-17. Start the *shipgate*:
+18. Start the *shipgate*:
 
 {{{
 $ shipgate.exe --nodaemon
@@ -221,7 +231,7 @@ $ shipgate.exe --nodaemon
 ...
 }}}
 
-18. Start the *ship_server*:
+19. Start the *ship_server*:
 
 {{{
 $ ship_server.exe --nodaemon
@@ -247,7 +257,7 @@ $ ship_server.exe --nodaemon
   * If it says: Connection refused
     * Shipgate is OFF (turn ON)
     * Server does not found the IP
-    * The port is not 3455 (use 3455)
+    * Port is not correct (must match both shipgate ports from XML)
 
 19. Optional: Start the *patch_server*:
 
