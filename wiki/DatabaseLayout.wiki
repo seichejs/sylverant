@@ -297,17 +297,18 @@ This table is used to store a list of currently online clients.
 {{{
 CREATE TABLE `online_clients` (
   `guildcard` int(11) NOT NULL,
-  `name` varchar(32) character set utf8 NOT NULL,
+  `name` varchar(32) NOT NULL,
   `ship_id` int(10) unsigned NOT NULL,
   `block` int(10) unsigned NOT NULL,
-  `lobby` varchar(32) collate latin1_general_ci NOT NULL,
+  `lobby` varchar(32) NOT NULL,
   `lobby_id` int(10) unsigned default NULL,
+  `dlobby_id` int(10) unsigned default NULL,
   PRIMARY KEY  (`guildcard`),
   KEY `ship_id` (`ship_id`),
   KEY `lobby_id` (`lobby_id`),
   CONSTRAINT `online_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
   CONSTRAINT `online_clients_ibfk_2` FOREIGN KEY (`ship_id`) REFERENCES `online_ships` (`ship_id`) ON DELETE CASCADE ON UPDATE CASCADE
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 }}}
 
 = Table online_ships =
