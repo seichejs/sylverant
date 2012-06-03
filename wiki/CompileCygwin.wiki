@@ -10,7 +10,7 @@ I.e: know how to get a SVN copy, and how to use make tools and a little about My
 
 Please note, that as r500, Sylverant will compile with IPv6 support by default. Cygwin already supports IPv6 on Windows 7, and partially on XP. In this guide, we'll indicate you the necessary flags to compile only with IPv4 support.
 
-*Last update:* 28 April 2012
+*Last update:* 3 July 2012
 
 = Steps =
 
@@ -18,9 +18,9 @@ You will need *Cygwin 1.7* or a newer version. Get the latest Cygwin here: http:
 
 == Compile phase ==
 
-1. Install Cygwin and add the following packages (with their dependencies):
+1. Install Cygwin and add the following packages (with their dependencies). If more than one version is found, use the latest one:
 
-*autotools automake libtool openssl openssl-devel libopenssl098 readline gettext-devel gcc-core gcc-g++ make libiconv libxml2 gnutils-devel2.8.6-1 libgnutils *
+*autoconf automake gcc-core gcc-g++ gettext-devel gnutls-devel libgnutls(26) libiconv libopenssl(098) libtool libxml2 (must be >=2.6) make openssl openssl-devel readline subversion *
 
 
 2.1. MYSQL Server side:
@@ -35,6 +35,7 @@ Get MySQL source code (tested with version 5.1.57).
 Extract sources to: /usr/local/
 
 {{{
+cd /usr/local/mysql-5.x
 ./configure --without-server --without-readline --without-libedit CFLAGS=-O2
 make
 make install
