@@ -224,6 +224,20 @@ CREATE TABLE `dreamcast_clients` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
 
+= Table dreamcast_nte_clients =
+This table is used to store the serials/access keys of anyone on the Dreamcast Network Trial Edition.
+
+{{{
+CREATE TABLE `dreamcast_nte_clients` (
+  `guildcard` int(11) NOT NULL,
+  `serial_number` char(16) NOT NULL,
+  `access_key` char(16) NOT NULL,
+  `dc_id` char(8) NOT NULL,
+  PRIMARY KEY  (`guildcard`),
+  CONSTRAINT `dreamcast_nte_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+}}}
+
 = Table friendlist =
 This table is used for storing friend lists of clients.
 
