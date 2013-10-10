@@ -54,6 +54,8 @@ An example of the directory layout for a machine hosting both a login server and
         * quests.xml
         * q777.qst
 
+All of that should be relatively easy to follow, except perhaps the quest54v1.qst in the pc-en directory. For all PSOv1 compatible quests that are supported on PSOPC, you should provide a version 1 compatible version of the quest for PSOPC. This pretty much only involves opening up the Dreamcast v1 version of the quest in Qedit and re-saving it in the PC format. This is required for allowing PSOPC players to play quests with Dreamcast v1 players.
+
 = quests.xml File Format =
 
 The full format of the quests.xml file (current as of 2013-10-09) is as follows:
