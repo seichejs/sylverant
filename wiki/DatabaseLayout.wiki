@@ -2,7 +2,7 @@
 #labels Phase-Deploy,Phase-Design,Phase-Implementation
 
 = Introduction =
-The database for Sylverant (needed on login servers and shipgates) consists of several tables. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. Please note, these are all subject to change, and some have already changed several times.
+The database for Sylverant (needed only for the login server and shipgate -- not for individual ships if they are to be run separately from the shipgate/login server) consists of several tables. This page details the current layout of the database and provides the CREATE TABLE statements needed to create each table. Please note, these are all subject to change, and some have already changed several times.
 
 = Table account_data =
 The account_data table contains information on registered users of the server. The create table used is as follows:
