@@ -76,7 +76,7 @@ The various fields are explained below:
   * Default Lobby Event: Set the event that's shown in the lobby. Lobby events aren't supported on PSODC/PSOPC. Valid values are 0-14.
   * Default Game Event: Set the event that's shown in games. These, unlike lobby events, are supported on all versions of PSO. Valid values are 0-6. In addition, you can define various events to be triggered based on the date by setting them up with `<event>` tags.
   * Info Filename/Info Title: The text shown at the lobby counter when the user selects the Information option. You can have multiple files here. The file itself should be a normal UTF-8 text file, and the description should be less than 16 characters in length. I suggest placing the information files in a "info" directory off the top of the sylverant directory, but that's not a strict requirement. These only work on PSODC/PSOPC since the Information option doesn't exist on PSOGC. You can specify whether or not to show this information entry to each version by setting the corresponding flag to "true" or "false" here. Also, you can specify information entries for each language code by using that setting -- separate each language by a comma. The default is to show each entry to all languages and all versions if none of the settings are specified.
-  * Quest Directory: A directory tree containing quests. This will be detailed more in-depth later.
+  * Quest Directory: A directory tree containing quests. See the ConfiguringQuests page for more information about how the quest directory should be set up.
   * Item List File: The list of items that are to be used for /legit. See the legits.xml in the ship_server for a full example of how to set it up.
   * Message of the Day File: A text file that is used to send a message to clients when they connect. These messages currently will show up for Dreamcast and PC clients when they join the lobby, and are not supported on any other versions. Keep the messages fairly short, as there's no way to scroll them on PSODC/PSOPC (they appear in the same large message box as the info desk entries). Like the information desk stuff, this can be limited by versions and languages.
   * Bans File: The filename to use to store local (ship-level) bans. If this file is not specified, bans will not persist when the server is restarted. You must make sure that the server can write to the specified file, otherwise the file won't be saved. The server will completely manage this file, so you don't have to worry about creating the file ahead of time or doing anything to it in general (hence why I haven't documented the format of the file, not that its hard to figure out).
@@ -106,42 +106,6 @@ The GM configuration file is a simple XML list of serial number/access key/guild
 }}}
 
 For each person in the list, you must place each element in its prescribed place. You can provide multiple GMs in the file (and probably will). The pieces in and of themselves are self explanatory.
-
-== Quest Configuration ==
-
-*This section is old, incorrect, and needs to be rewritten.*
-
-The Quest configuration file is an XML list of categories/quests that are available on your ship. An example is shown below. 
-
-{{{
-<?xml version="1.0" encoding="UTF-8"?>
-
-<!DOCTYPE quests PUBLIC "-//Sylverant//DTD Quest List 1.0//EN" 
-  "http://sylverant.net/dtd/quests1/quests.dtd">
-
-<quests>
-    <category name="VR">
-        <description>These are quests
-where you battle
-enemies in a
-virtual room.</description>
-        <quest name="Towards the Future" prefix="q118" v1="false" v2="true"
-         gc="false" bb="false">
-            <short>The enemy simulator
-is complete.
-Challenge the other
-hunters.</short>
-            <long>Client:  Principal
-Quest:
- The enemy simulator is complete.
- Challenge the other hunters.
-Reward:  ??? Meseta</long>
-        </quest>
-    </category>
-</quests>
-}}}
-
-You can configure multiple categories, and multiple quests per category. In this case, only one category, with one quest has been configured. The quest itself will be in the quests subdirectory of the Sylverant directory. In this case, only PSOv2 (and PSOPC) are supported. A quest that is supported in v2 must be supported in PSOPC at the moment. All the others are independent. The files for this quest would be called q118v2.dat, q118v2.bin, q118pc.dat, q118pc.bin. These quests are in what Qedit refers to as Kohle basic layout. Version 1 quests will end with v1, Version 2 will end with v2, PC will end with pc, and so forth. Hopefully everything else should be obvious.
 
 == Map Files ==
 
