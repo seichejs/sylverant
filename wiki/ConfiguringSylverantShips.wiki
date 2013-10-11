@@ -92,20 +92,20 @@ The various fields are explained below:
 
 == GM Configuration ==
 
-The GM configuration file is a simple XML list of serial number/access key/guildcard sets for the users that should have GM permissions on the ship. I call the file iselia_gms.xml for the Iselia ship, but once again, this is configurable in the ship_config.xml file above.
+The GM configuration file is a simple XML list of guildcards for the users that should have GM permissions on the ship. I call the file iselia_gms.xml for the Iselia ship, but once again, this is configurable in the ship_config.xml file above. This file also used to include the serial numbers and access keys of the users, but this requirement was dropped in r714 of the ship server as it was redundant and actually prevented Blue Burst users from being given GM powers on a ship.
 
 {{{
 <?xml version="1.0" encoding="UTF-8"?>
 
-<!DOCTYPE gms PUBLIC "-//Sylverant//DTD Ship GM List 1.0//EN" 
-  "http://sylverant.net/dtd/gms1/gms.dtd">
+<!DOCTYPE gms PUBLIC "-//Sylverant//DTD Ship GM List 1.1//EN" 
+  "http://sylverant.net/dtd/gms1.1/gms.dtd">
 
 <gms>
-    <gm serial="Serial Number" accesskey="Access Key" guildcard="Guild Card" />
+    <gm guildcard="Guild Card Number" root="Give Root Privileges" />
 </gms>
 }}}
 
-For each person in the list, you must place each element in its prescribed place. You can provide multiple GMs in the file (and probably will). The pieces in and of themselves are self explanatory.
+For each person in the list, you must place each element in its prescribed place. You can provide multiple GMs in the file (and probably will). Put the user's guildcard number in the Guild Card Number space. You can specify either "true" or "false" for the Give Root Privileges part, depending on whether you want that user to have full privileges on the ship (including the ability to shut down the ship and restart it).
 
 == Map Files ==
 
