@@ -218,7 +218,7 @@ CREATE TABLE `dreamcast_clients` (
   `guildcard` int(11) NOT NULL,
   `serial_number` char(8) NOT NULL,
   `access_key` char(8) NOT NULL,
-  `dc_id` char(8) NOT NULL,
+  `dc_id` char(8) NULL,
   PRIMARY KEY  (`guildcard`),
   CONSTRAINT `dreamcast_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
@@ -232,7 +232,7 @@ CREATE TABLE `dreamcast_nte_clients` (
   `guildcard` int(11) NOT NULL,
   `serial_number` char(16) NOT NULL,
   `access_key` char(16) NOT NULL,
-  `dc_id` char(8) NOT NULL,
+  `dc_id` char(8) NULL,
   PRIMARY KEY  (`guildcard`),
   CONSTRAINT `dreamcast_nte_clients_ibfk_1` FOREIGN KEY (`guildcard`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
