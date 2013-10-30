@@ -300,7 +300,8 @@ This table is used to set a ban on an IP address at the shipgate level.
 CREATE TABLE `ip_bans` (
   `ban_id` int(11) NOT NULL,
   `addr` int(10) unsigned NOT NULL,
-  PRIMARY KEY  (`ban_id`),
+  `mask` int(10) unsigned NOT NULL DEFAULT '4294967295',
+  PRIMARY KEY (`ban_id`),
   CONSTRAINT `ip_bans_ibfk_1` FOREIGN KEY (`ban_id`) REFERENCES `bans` (`ban_id`) ON DELETE CASCADE ON UPDATE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 }}}
