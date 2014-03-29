@@ -19,7 +19,7 @@ CREATE TABLE `account_data` (
   `privlevel` int(10) unsigned NOT NULL default '0',
   `dressflag` tinyint(1) NOT NULL default '0',
   PRIMARY KEY  (`account_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
 }}}
 
 = Table bans =
@@ -386,7 +386,27 @@ CREATE TABLE `ship_data` (
   `memo` varchar(256) collate latin1_general_ci default NULL,
   `sha1_fingerprint` binary(20) NOT NULL,
   PRIMARY KEY  (`idx`)
-) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_general_ci;
+}}}
+
+= Table simple_mail =
+This table contains any simple mail sent to account holders while they are offline. When they log in, they'll get a message letting them know that they have mail to read on the website.
+
+{{{
+CREATE TABLE `simple_mail` (
+  `message_id` bigint(20) unsigned NOT NULL AUTO_INCREMENT,
+  `recipient` int(11) NOT NULL,
+  `status` tinyint(4) NOT NULL DEFAULT '0',
+  `sender` int(11) DEFAULT NULL,
+  `sender_name` varchar(32) NOT NULL,
+  `sent_time` int(10) unsigned NOT NULL,
+  `message` text NOT NULL,
+  PRIMARY KEY (`message_id`),
+  KEY `recipient` (`recipient`),
+  KEY `sender` (`sender`),
+  CONSTRAINT `simple_mail_ibfk_1` FOREIGN KEY (`recipient`) REFERENCES `guildcards` (`guildcard`) ON DELETE CASCADE ON UPDATE CASCADE,
+  CONSTRAINT `simple_mail_ibfk_2` FOREIGN KEY (`sender`) REFERENCES `guildcards` (`guildcard`) ON DELETE SET NULL ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8
 }}}
 
 = Table user_options =
