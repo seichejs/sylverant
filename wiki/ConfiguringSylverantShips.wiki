@@ -58,7 +58,7 @@ The base configuration file for configuring the Ship Server is called ship_confi
 
 The various fields are explained below:
   * Shipgate Address: The IP Address or DNS Hostname of the Shipgate to connect to.
-  * Shipgate Port: The port to connect to the Shipgate on. Currently this must be 3455.
+  * Shipgate Port: The port to connect to the Shipgate on. This is set by the shipgate administrator -- contact them for the correct value to set here.
   * Shipgate CA Certificate File: The filename of the CA Certificate for the shipgate. This is relative to the base Sylverant directory (usually /usr/local/share/sylverant). This must be a PEM-encoded certificate.
   * Ship Name: The name you wish to call your ship. This should be less than 16 characters in length.
   * Number of Blocks: Should be obvious what this is for.
