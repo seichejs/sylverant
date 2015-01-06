@@ -115,6 +115,6 @@ In order to support server-side drops for each version of the game, the server n
 
 For PSOv2, you should have two files for each area/map/variation combination: mxyz.dat and mxyz_o.dat, where x, y, and z refer to the area, map, and variation number respectively (area is a hex digit from 0-E -- digits from A-E must be capitalized). The first of these files is the enemy data, the second is the object data. Note that this *does not* follow the naming convention used by the game itself.
 
-For Gamecube, you will have maps for episode 1 and episode 2. For this, the filenames have changed to mwxyz.dat and mwxyz_o.dat. x, y, and z are as they are for the Dreamcast version, and m is 1 for episode 1 or 2 for episode 2.
+For Gamecube, you will have maps for episode 1 and episode 2. For this, the filenames have changed to mwxyz.dat and mwxyz_o.dat. x, y, and z are as they are for the Dreamcast version, and w is 1 for episode 1 or 2 for episode 2.
 
 For Blue Burst, there are also single-player maps. By default, the normal map is used if a single-player variant is not found. If you have a single-player variant of the map, it should be named swxyz.dat, where w, x, y, and z are as they are for the Gamecube map set. One thing to note is that w is 3 for Episode 4.
